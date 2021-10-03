@@ -1,6 +1,8 @@
 set -x DOTFILES_DIR "$HOME/.dotfiles"
 
 if [ -z "$_ONCE_" ]
+  export _ONCE_=1
+  
   if not functions -q fisher
     curl -sL git.io/fisher | source
     fisher update
