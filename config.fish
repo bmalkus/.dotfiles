@@ -34,27 +34,47 @@ bind -k nul forward-char
 #######################################################################
 
 
-function fish_prompt
-  set rc $status
-  echo -ns \
-  (set_color yellow) \
-  (__prefix) \
-  (set_color blue) \
-  (__virtual_env_info) \
-  (__git_info) \
-  (__user) \
-  (__rc $rc) \
-  (set_color --bold white) \
-  (__prompt_pwd) " > " \
-  (set_color normal)
-end
+# function fish_prompt
+#   set rc $status
+#   echo -ns \
+#   (set_color yellow) \
+#   (__prefix) \
+#   (set_color blue) \
+#   (__virtual_env_info) \
+#   (__git_info) \
+#   (__user) \
+#   (__rc $rc) \
+#   (set_color --bold white) \
+#   (__prompt_pwd) " > " \
+#   (set_color normal)
+# end
 
-function fish_right_prompt
-  set rc $status
-  echo -ns \
-  (set_color blue) \
-  (date '+%m/%d/%y %H:%M:%S') \
-  (set_color normal)
+# function fish_right_prompt
+#   set rc $status
+#   echo -ns \
+#   (set_color blue) \
+#   (date '+%m/%d/%y %H:%M:%S') \
+#   (set_color normal)
+# end
+
+set tide_left_prompt_items virtual_env prompt_pwd git status cmd_duration character
+set tide_right_prompt_items time
+set tide_virtual_env_icon
+set tide_git_color_upstream $tide_pwd_color_anchors
+
+function _tide_item_prompt_pwd
+  set -l split_pwd (prompt_pwd | string split /)
+  set -l _tide_color_anchors (set_color -o $tide_pwd_color_anchors)
+  set -l _tide_color_truncated_dirs (set_color $tide_pwd_color_truncated_dirs || echo)
+  set -l _tide_reset_to_color_dirs (set_color normal -b $tide_pwd_bg_color; set_color $tide_pwd_color_dirs)
+  if test (count $split_pwd) -gt 1
+    set split_pwd_for_output $split_pwd
+    if test -n "$split_pwd[1]"
+      set split_pwd_for_output $_tide_color_anchors$split_pwd[1]$_tide_reset_to_color_dirs $split_pwd[2..]
+    end
+    set split_pwd_for_output[-1] $_tide_color_anchors$split_pwd[-1]$_tide_reset_to_color_dirs
+    _tide_print_item prompt_pwd (string join -- / $split_pwd_for_output)
+  end
 end
 
 function __sep
@@ -300,6 +320,10 @@ abbr -a gunignore   git update-index --no-skip-worktree
 
 function git_current_branch
   git rev-parse --abbrev-ref HEAD 2>/dev/null
+end
+
+function gwip -d "git commit a work-in-progress branch"
+  git add -A; git rm (git ls-files --deleted) 2> /dev/null; git commit -m "--wip-- [ci skip]"
 end
 
 abbr -a cd.         cd ..
