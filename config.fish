@@ -63,16 +63,40 @@ set tide_virtual_env_icon
 set tide_git_color_upstream $tide_pwd_color_anchors
 
 function _tide_item_prompt_pwd
-  set -l split_pwd (prompt_pwd | string split /)
+  set -l split_pwd (string replace -- $HOME '~' $PWD | string split /)
   set -l _tide_color_anchors (set_color -o $tide_pwd_color_anchors)
-  set -l _tide_color_truncated_dirs (set_color $tide_pwd_color_truncated_dirs || echo)
+  set -l _tide_color_truncated_dirs (set_color $tide_pwd_color_truncated_dirs)
   set -l _tide_reset_to_color_dirs (set_color normal -b $tide_pwd_bg_color; set_color $tide_pwd_color_dirs)
   if test (count $split_pwd) -gt 1
-    set split_pwd_for_output $split_pwd
-    if test -n "$split_pwd[1]"
+    # Anchor first and last directories (which may be the same)
+    if test -n "$split_pwd[1]" # ~/foo/bar, hightlight ~
       set split_pwd_for_output $_tide_color_anchors$split_pwd[1]$_tide_reset_to_color_dirs $split_pwd[2..]
+    else # /foo/bar, hightlight foo not empty string
+      set split_pwd_for_output '' $_tide_color_anchors$split_pwd[2]$_tide_reset_to_color_dirs $split_pwd[3..]
     end
     set split_pwd_for_output[-1] $_tide_color_anchors$split_pwd[-1]$_tide_reset_to_color_dirs
+
+    if not test -w $PWD
+      set -g tide_pwd_icon $tide_pwd_icon_unwritable' '
+    else if test $PWD = $HOME
+      set -g tide_pwd_icon $tide_pwd_icon_home' '
+    else
+      set -g tide_pwd_icon $tide_pwd_icon' '
+    end
+
+    i=1 for dir_section in $split_pwd[2..-2]
+      set -l parent_dir (string join -- / $split_pwd[..$i] | string replace '~' $HOME) # Uses i before increment
+
+      set i (math $i + 1)
+
+      # Returns true if any markers exist in dir_section
+      if test -z false (string split --max 2 " " -- "-o -e "$parent_dir/$dir_section/$tide_pwd_markers)
+        set split_pwd_for_output[$i] $_tide_color_anchors$dir_section$_tide_reset_to_color_dirs
+      else
+        set split_pwd_for_output[$i] $_tide_color_truncated_dirs(string sub -s 1 -l 1 $dir_section)$_tide_reset_to_color_dirs
+      end
+    end
+
     _tide_print_item prompt_pwd (string join -- / $split_pwd_for_output)
   end
 end
