@@ -57,7 +57,7 @@ bind -k nul forward-char
 #   (set_color normal)
 # end
 
-set tide_left_prompt_items virtual_env prompt_pwd git status cmd_duration character
+set tide_left_prompt_items virtual_env context prompt_pwd git status cmd_duration character
 set tide_right_prompt_items time
 set tide_virtual_env_icon
 set tide_git_color_upstream $tide_pwd_color_anchors
