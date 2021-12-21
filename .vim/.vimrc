@@ -96,9 +96,18 @@ if v:version >= 703
       endif
       if p.isUnixHiddenFile()
         call b:NERDTree.ui.setShowHidden(1)
-        call b:NERDTree.render()
+      else
+        let tmp_p = p.getParent()
+        while tmp_p.isUnder(b:NERDTree.root.path)
+          if tmp_p.isUnixHiddenFile()
+            call b:NERDTree.ui.setShowHidden(1)
+            break
+          endif
+          let tmp_p = tmp_p.getParent()
+        endwhile
       endif
       let node = b:NERDTree.root.reveal(p)
+      call b:NERDTree.render()
       call node.putCursorHere(1,0)
     catch /NERDTree.InvalidArgumentsError/
       let path = fnamemodify(path, ':h')
@@ -107,8 +116,8 @@ if v:version >= 703
       if !p.isUnder(b:NERDTree.root.path)
         call b:NERDTree.changeRoot(dir)
       endif
+      call b:NERDTree.render()
     endtry
-    call b:NERDTree.render()
   endfunction
 
   nmap n :<C-r>=&ft == 'nerdtree' ? 'normal q' : 'call NERDTreeFindCurrentBuffer()'<CR><CR>
