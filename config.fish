@@ -27,6 +27,8 @@ end
 
 alias sr=". $HOME/.config/fish/config.fish"
 
+bind -k nul forward-char
+
 #######################################################################
 #                               prompt                                #
 #######################################################################
@@ -59,6 +61,7 @@ set tide_left_prompt_items virtual_env context prompt_pwd git status cmd_duratio
 set tide_right_prompt_items time
 set tide_virtual_env_icon
 set tide_git_color_upstream $tide_pwd_color_anchors
+set tide_prompt_add_newline_before false
 
 function _tide_item_prompt_pwd
   set -l split_pwd (string replace -- $HOME '~' $PWD | string split /)
