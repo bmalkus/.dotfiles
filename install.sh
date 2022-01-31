@@ -19,6 +19,14 @@ _install()
   ln -s "$1"
 }
 
+_install_cp()
+{
+  target=$(basename "$1")
+  [ -L "$target" ] && unlink "$target"
+  [ -e "$target" ] && mv "$target" "${target}.old" && echo "$target -> ${target}.old"
+  cp "$1" .
+}
+
 cd
 
 _install "$target_dir/.gitconfig"
@@ -36,7 +44,7 @@ _install "$target_dir/.terminfo"
 if [[ $(uname -s) =~ Darwin ]]; then
   cd $HOME/Library/Filters/
   for f in $target_dir/filters/*; do
-    _install "$f"
+    _install_cp "$f"
   done
 fi
 

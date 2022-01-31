@@ -31,11 +31,20 @@ bind -k nul forward-char
 #                               prompt                                #
 #######################################################################
 
-set tide_left_prompt_items virtual_env context prompt_pwd git status cmd_duration character
+set tide_left_prompt_items anaconda virtual_env context prompt_pwd git status cmd_duration character
 set tide_right_prompt_items time
 set tide_virtual_env_icon
 set tide_git_color_upstream $tide_pwd_color_anchors
 set tide_prompt_add_newline_before false
+
+function _tide_item_anaconda
+  if test -n "$CONDA_DEFAULT_ENV"
+    _tide_print_item anaconda "$CONDA_DEFAULT_ENV"
+  end
+end
+
+set -U tide_anaconda_color FFAB76
+set -U tide_anaconda_bg_color normal
 
 function _tide_item_prompt_pwd
   set -l split_pwd (string replace -- $HOME '~' $PWD | string split /)
