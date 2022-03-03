@@ -1,3 +1,5 @@
+export DOTFILES_DIR="$HOME/.dotfiles"
+
 alias_if_needed()
 {
   gcmd="g$1"
@@ -22,8 +24,6 @@ alias ....='cd ../../..'
 
 alias c-='c -'
 alias j='jump'
-
-. $DOTFILES_DIR/z.sh
 
 if [[ ! $(uname -s) =~ Darwin || $_ls == "gls" ]]; then
   alias ls='$_ls --color=auto'

@@ -27,6 +27,10 @@ alias sr=". $HOME/.config/fish/config.fish"
 
 bind -k nul forward-char
 
+export FZF_DEFAULT_COMMAND='ag $dir -g "" -U --hidden --ignore ".git/" 2>/dev/null'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND='fd $dir --type d --hidden --exclude ".git" 2/dev/null'
+
 #######################################################################
 #                               prompt                                #
 #######################################################################
@@ -37,14 +41,53 @@ set tide_virtual_env_icon
 set tide_git_color_upstream $tide_pwd_color_anchors
 set tide_prompt_add_newline_before false
 
+set tide_anaconda_color FFAB76
+set tide_anaconda_bg_color normal
+# set tide_pwd_color_anchors 00AFFF
+# set tide_pwd_color_dirs 0087AF
+
 function _tide_item_anaconda
   if test -n "$CONDA_DEFAULT_ENV"
     _tide_print_item anaconda "$CONDA_DEFAULT_ENV"
   end
 end
 
-set -U tide_anaconda_color FFAB76
-set -U tide_anaconda_bg_color normal
+function _tide_print_item --argument item
+  item_bg_color_name=tide_"$item"_bg_color set item_bg_color $$item_bg_color_name
+
+  if test "$_tide_which_side_working_on" = left
+    if test "$_tide_last_item" = newline
+      if test "$item" != character
+        set_color $item_bg_color -b normal
+        printf '%s' $tide_left_prompt_prefix
+      end
+    else if test "$item" != character
+      set_color -o $tide_prompt_color_separator_same_color
+      printf '%s' $tide_left_prompt_separator_same_color
+    else
+      printf ' '
+    end
+  else if test "$_tide_last_item" = newline
+    set_color $item_bg_color -b normal
+    printf '%s' $tide_right_prompt_prefix
+  else if test "$item" != character
+    set_color -o $tide_prompt_color_separator_same_color
+    printf '%s' $tide_left_prompt_separator_same_color
+  else
+    printf ' '
+  end
+
+  item_color_name=tide_"$item"_color set_color $$item_color_name -b $item_bg_color
+
+  if test "$tide_prompt_pad_items" = true -a "$item" != character
+    printf '%s' ' ' $argv[2..] ' '
+  else
+    printf '%s' $argv[2..]
+  end
+
+  set -g _tide_previous_bg_color $item_bg_color
+  set -g _tide_last_item $item
+end
 
 function _tide_item_prompt_pwd
   set -l split_pwd (string replace -- $HOME '~' $PWD | string split /)
@@ -56,7 +99,7 @@ function _tide_item_prompt_pwd
     if test -n "$split_pwd[1]" # ~/foo/bar, hightlight ~
       set split_pwd_for_output $_tide_color_anchors$split_pwd[1]$_tide_reset_to_color_dirs $split_pwd[2..]
     else # /foo/bar, hightlight foo not empty string
-      set split_pwd_for_output '' $_tide_color_anchors$split_pwd[2]$_tide_reset_to_color_dirs $split_pwd[3..]
+      set split_pwd_for_output $_tide_reset_to_color_dirs $_tide_color_anchors$split_pwd[2]$_tide_reset_to_color_dirs $split_pwd[3..]
     end
     set split_pwd_for_output[-1] $_tide_color_anchors$split_pwd[-1]$_tide_reset_to_color_dirs
 

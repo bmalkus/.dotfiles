@@ -42,10 +42,13 @@ _install "$target_dir/.vim/.vimrc"
 _install "$target_dir/.terminfo"
 
 if [[ $(uname -s) =~ Darwin ]]; then
-  cd $HOME/Library/Filters/
-  for f in $target_dir/filters/*; do
-    _install_cp "$f"
-  done
+  if cd $HOME/Library/Filters/ 2>/dev/null; then
+    for f in $target_dir/filters/*; do
+      _install_cp "$f"
+    done
+  else
+    echo "No $HOME/Library/Filters/ directory, not installing filters"
+  fi
 fi
 
 mkdir -p $HOME/.config/fish/

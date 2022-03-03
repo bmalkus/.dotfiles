@@ -491,7 +491,7 @@ else
           \ 'sink*': function("s:mru_sink"),
           \ 'options': '-m -x +s --prompt "' . s:git_root_or_cwd() .
           \ ' (MRU)> " --ansi --expect='.join(keys(s:default_action), ','),
-          \ 'down':    '40%'
+          \ 'window': { 'width': 0.9, 'height': 0.6 }
           \ })
   endfunction
 
