@@ -33,36 +33,13 @@ bind -k nul forward-char
 
 export FZF_DEFAULT_COMMAND='ag $dir -g "" -U --hidden --ignore ".git/" 2>/dev/null'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_ALT_C_COMMAND='fd $dir --type d --hidden --exclude ".git" 2/dev/null'
+if type -q fd
+  export FZF_ALT_C_COMMAND='fd $dir --type d --hidden --exclude ".git" 2/dev/null'
+end
 
 #######################################################################
 #                               prompt                                #
 #######################################################################
-
-if [ -n "$__INTELLIJ_COMMAND_HISTFILE__" ]
-  function fish_prompt
-    set rc $status
-    echo -ns \
-    (set_color yellow) \
-    (__prefix) \
-    (set_color blue) \
-    (__virtual_env_info) \
-    (__git_info) \
-    (__user) \
-    (__rc $rc) \
-    (set_color --bold white) \
-    (__prompt_pwd) " > " \
-    (set_color normal)
-  end
-
-  function fish_right_prompt
-    set rc $status
-    echo -ns \
-    (set_color blue) \
-    (date '+%m/%d/%y %H:%M:%S') \
-    (set_color normal)
-  end
-end
 
 set tide_left_prompt_items anaconda virtual_env context prompt_pwd git status cmd_duration character
 set tide_right_prompt_items time
@@ -117,6 +94,35 @@ function _tide_item_prompt_pwd
     end
 
     _tide_print_item prompt_pwd (string join -- / $split_pwd_for_output)
+  end
+end
+
+#######################################################################
+#                           IntelliJ propt                            #
+#######################################################################
+
+if [ -n "$__INTELLIJ_COMMAND_HISTFILE__" ]
+  function fish_prompt
+    set rc $status
+    echo -ns \
+    (set_color yellow) \
+    (__prefix) \
+    (set_color blue) \
+    (__virtual_env_info) \
+    (__git_info) \
+    (__user) \
+    (__rc $rc) \
+    (set_color --bold white) \
+    (__prompt_pwd) " > " \
+    (set_color normal)
+  end
+
+  function fish_right_prompt
+    set rc $status
+    echo -ns \
+    (set_color blue) \
+    (date '+%m/%d/%y %H:%M:%S') \
+    (set_color normal)
   end
 end
 
@@ -221,7 +227,6 @@ function __prompt_pwd --description 'Print the current working directory, shorte
         string replace -ar '(\.?[^/]{'"$fish_prompt_pwd_dir_length"'})[^/]*/' '$1/' $tmp
     end
 end
-
 
 #######################################################################
 #                                marks                                #

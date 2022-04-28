@@ -2,3 +2,4 @@
 dotfiles_backup*/
 .antigen/
 .zgen/
+.shellrc.config
