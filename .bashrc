@@ -21,6 +21,8 @@ prompt_command()
 
 [[ ! $PROMPT_COMMAND =~ "__dir_history" ]] && PROMPT_COMMAND="$PROMPT_COMMAND prompt_command; __dir_history;"
 
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
 alias sr=". $HOME/.bashrc"
 
 [ -r "$HOME/.bashrc.local" ] && . "$HOME/.bashrc.local"

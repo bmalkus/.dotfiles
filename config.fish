@@ -8,6 +8,10 @@ if [ -z "$_ONCE_" ]
     fisher update
   end
 
+  . $DOTFILES_DIR/gcloud_sdk_argcomplete.fish
+  complete -f -c gcloud -a '(gcloud_sdk_argcomplete)'
+  complete -x -c gsutil -a '(gcloud_sdk_argcomplete)'
+
   [ -r "$HOME/.config/fish/once.local.fish" ] && . "$HOME/.config/fish/once.local.fish"
 end
 
@@ -75,43 +79,6 @@ function _tide_item_anaconda
   if test -n "$CONDA_DEFAULT_ENV"
     _tide_print_item anaconda "$CONDA_DEFAULT_ENV"
   end
-end
-
-function _tide_print_item --argument item
-  item_bg_color_name=tide_"$item"_bg_color set item_bg_color $$item_bg_color_name
-
-  if test "$_tide_which_side_working_on" = left
-    if test "$_tide_last_item" = newline
-      if test "$item" != character
-        set_color $item_bg_color -b normal
-        printf '%s' $tide_left_prompt_prefix
-      end
-    else if test "$item" != character
-      set_color -o $tide_prompt_color_separator_same_color
-      printf '%s' $tide_left_prompt_separator_same_color
-    else
-      printf ' '
-    end
-  else if test "$_tide_last_item" = newline
-    set_color $item_bg_color -b normal
-    printf '%s' $tide_right_prompt_prefix
-  else if test "$item" != character
-    set_color -o $tide_prompt_color_separator_same_color
-    printf '%s' $tide_left_prompt_separator_same_color
-  else
-    printf ' '
-  end
-
-  item_color_name=tide_"$item"_color set_color $$item_color_name -b $item_bg_color
-
-  if test "$tide_prompt_pad_items" = true -a "$item" != character
-    printf '%s' ' ' $argv[2..] ' '
-  else
-    printf '%s' $argv[2..]
-  end
-
-  set -g _tide_previous_bg_color $item_bg_color
-  set -g _tide_last_item $item
 end
 
 function _tide_item_prompt_pwd

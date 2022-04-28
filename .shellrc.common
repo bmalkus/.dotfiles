@@ -1,7 +1,7 @@
 [ -z $PROMPT_GIT_INFO ] && export PROMPT_GIT_INFO=1
 [ -z $PROMPT_MULTILINE ] && export PROMPT_MULTILINE=0
 [ -z $PROMPT_PREFIX ] && export PROMPT_PREFIX=""
-[ -z $VIM_FZF ] && export VIM_FZF=0
+[ -z $VIM_FZF ] && export VIM_FZF=1
 
 alias tmux='tmux -2'
 

@@ -348,11 +348,6 @@ else
     return fnamemodify(fnamemodify(a:dir_or_file, ':p'), ':p')
   endfunction
 
-  command! -nargs=? -complete=dir FilesBetterPrompt call fzf#vim#files(<q-args>, {
-        \ 'source': 'ag -g "" --hidden -U --ignore .git/',
-        \ 'options': '--preview "cat {}" --prompt "' . (<q-args> ? getcwd() : s:full_path(<q-args>)) . ' (Files)> "'
-        \ })
-
   function! s:mru_list_without_nonexistent()
     if empty(expand('%')) || &readonly
       let mru_list = ctrlp#mrufiles#list()
@@ -364,39 +359,8 @@ else
     return mru_list
   endfunction
 
-  function! s:git_files_if_in_repo()
-    let expanded = expand('%:p:h')
-    if ! exists('b:git_dir')
-      let expanded = getcwd()
-      return fzf#vim#files(expanded, {
-            \ 'source': 'ag -g "" --hidden -U --ignore .git/',
-            \ 'options': '--preview "cat {}" --prompt "' . expanded . ' (Files)> "'
-            \ })
-    else
-      let git_root = fugitive#repo().tree()
-      let save_cwd = fnameescape(getcwd())
-      let cdCmd = (haslocaldir() ? 'lcd!' : 'cd!')
-      try
-        exec cdCmd . git_root
-        call fzf#vim#gitfiles('', {
-              \ 'options': '--preview "cat {}" --prompt "' . git_root . ' (GitFiles)> "'
-              \ })
-      finally
-        exec cdCmd . save_cwd
-      endtry
-    endif
-  endfunction
-
   function! s:git_root_or_cwd()
-    return exists('b:git_dir') ? fugitive#repo().tree() : getcwd()
-  endfunction
-
-  function! s:all_files_git_root_or_cwd()
-    let path = s:git_root_or_cwd()
-    call fzf#vim#files(path, {
-          \ 'source': 'ag -g "" --hidden -U --ignore .git/',
-          \ 'options': '--preview "cat {}" --prompt "' . path . ' (Files)> "'
-          \ })
+    return (exists('b:git_dir') && ! empty(b:git_dir)) ? fugitive#repo().tree() : getcwd()
   endfunction
 
   " expands path relatively to cwd or git root if possible
@@ -491,75 +455,21 @@ else
           \ 'sink*': function("s:mru_sink"),
           \ 'options': '-m -x +s --prompt "' . s:git_root_or_cwd() .
           \ ' (MRU)> " --ansi --expect='.join(keys(s:default_action), ','),
-          \ 'window': { 'width': 0.9, 'height': 0.6 }
+          \ 'window': { 'width': 0.9, 'height': 0.6 },
+          \ 'preview': ['right:50%', 'ctrl-/']
           \ })
   endfunction
 
-  function! s:ag_preview_height(bang)
-    return (a:bang ? &lines : (&lines * 40 / 100)) - 2
-  endfunction
-
-  function! s:ag_in(bang, ...)
-    let tokens  = a:000
-    let ag_opts = join(filter(copy(tokens), 'v:val =~ "^-"'))
-    let query   = (filter(copy(tokens), 'v:val !~ "^-"'))
-    let save_cwd = fnameescape(getcwd())
-    let cdCmd = (haslocaldir() ? 'lcd!' : 'cd!')
-    " in case provided path is relative:
-    " treat it as relative to dir of current file, not cwd
-    try
-      exec cdCmd . fnameescape(expand('%:p:h'))
-      let dir = s:full_path(a:1)
-    finally
-      exec cdCmd . save_cwd
-    endtry
-    call fzf#vim#ag(join(query[1:], ' '), ag_opts . ' --ignore .git/', {
-          \ 'dir': dir,
-          \ 'options': '--nth=4.. -d: --prompt "' . dir . ' (Ag)> "'
-          \ }, a:bang ? 1 : 0)
-  endfunction
-
-  function! s:ag_with_opts(bang, ...)
-    let tokens  = a:000
-    let ag_opts = join(filter(copy(tokens), 'v:val =~ "^-"'))
-    let query   = join(filter(copy(tokens), 'v:val !~ "^-"'))
-    let dir = s:git_root_or_cwd()
-    call fzf#vim#ag(query, ag_opts . ' --ignore .git/', {
-          \ 'dir': dir,
-          \ 'options': '--nth=4.. -d: --prompt "' . dir . ' (Ag)> "'
-          \ }, a:bang ? 1 : 0)
-  endfunction
-
-  command! GitFilesOrCwd call s:git_files_if_in_repo()
-
-  command! FilesGitRootOrCwd call s:all_files_git_root_or_cwd()
-
   command! Mru call s:fzf_mru()
 
-  command! -nargs=+ -complete=dir -bang Agin call s:ag_in(<bang>0, <f-args>)
-
-  command! -nargs=* -bang Agcwd exec 'Agin<bang>'  getcwd() '<args>'
-  command! -nargs=* -bang AgGitRootOrCwd call s:ag_with_opts(<bang>0, <f-args>)
-
-  runtime after/plugin/overrideAg.vim
-
-  cnoreabbrev ag Ag
-  cnoreabbrev agin Agin
-  cnoreabbrev agcwd Agcwd
+  cnoreabbrev rg Rg
 
   let g:ctrlp_map = ''
 
   nnoremap <C-p> :Mru<CR>
   nnoremap <C-b> :Buffers<CR>
-  nnoremap <leader>g :GitFilesOrCwd<CR>
-  nnoremap <leader>a :FilesGitRootOrCwd<CR>
-
-  function! s:fzf_init()
-    command! -nargs=* -bang Ag AgGitRootOrCwd<bang> <args>
-    command! -nargs=? -complete=dir Files FilesBetterPrompt<bang> <args>
-  endfunction
-
-  call s:add_delayed_initializer(function('s:fzf_init'))
+  nnoremap <leader>g :GFiles<CR>
+  nnoremap <leader>a :Files<CR>
 endif
 
 " }}}
@@ -613,7 +523,7 @@ call s:add_delayed_initializer(function('s:python_setlocal'))
 
 " --------- golden-ratio ------- {{{
 
-if !has('gui_macvim')
+if !has('gui_macvim') && exists('*win_gettype')
 
   Plug 'roman/golden-ratio'
 
