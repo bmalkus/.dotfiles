@@ -174,7 +174,7 @@ Plug 'hynek/vim-python-pep8-indent'
 
 " ---------- ultisnips --------- {{{
 
-if v:version >= 704 && ( has('python3') || has('python') )
+if v:version >= 800 && ( has('python3') || has('python') )
 
   Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
