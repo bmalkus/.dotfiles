@@ -390,7 +390,7 @@ else
 
   function! s:color_path(path)
     if a:path =~ '^/'
-      return s:blue(a:path)
+      return s:cyan(a:path)
     else
       return s:yellow(a:path)
     endif
