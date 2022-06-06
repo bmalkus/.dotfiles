@@ -485,6 +485,10 @@ let g:airline_left_sep=''
 let g:airline_right_sep=''
 
 let g:airline#extensions#whitespace#enabled = 0
+if $PROMPT_GIT_INFO == 0
+    let g:airline#extensions#branch#enabled = 0
+    let g:airline#extensions#fugitiveline#enabled = 0
+endif
 
 let g:cpp_experimental_template_highlight = 1
 let g:cpp_concepts_highlight = 1
