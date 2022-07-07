@@ -1,5 +1,3 @@
-export DOTFILES_DIR="$HOME/.dotfiles"
-
 alias_if_needed()
 {
   gcmd="g$1"

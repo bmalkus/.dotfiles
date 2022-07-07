@@ -1,5 +1,7 @@
 [ -z $PROMPT_COLOR ] && export PROMPT_COLOR=1
 
+export DOTFILES_DIR="$HOME/.dotfiles"
+
 . "$DOTFILES_DIR/.shellrc.bash.zsh"
 
 prompt_command()
