@@ -1,40 +1,28 @@
-set -x DOTFILES_DIR "$HOME/.dotfiles"
+set -U DOTFILES_DIR "$HOME/.dotfiles"
 
-if [ -z "$_ONCE_" ]
-  set _ONCE_ 1
+if status --is-interactive && [ -z "$_DOTFILES_ONCE_" ]
+  set -U _DOTFILES_ONCE_ 1
 
-  if status --is-interactive && not functions -q fisher
+  if not functions -q fisher
     curl -sL git.io/fisher | source
     fisher update
+
+    echo 1 1 1 1 1 1 y | tide configure > /dev/null
+  end
+end
+
+if [ -z "$_DOTFILES_ONCE_ON_START_" ]
+  set _DOTFILES_ONCE_ON_START_ 1
+
+  if status --is-interactive
+    . $DOTFILES_DIR/gcloud_sdk_argcomplete.fish
+    complete -f -c gcloud -a '(gcloud_sdk_argcomplete)'
+    complete -x -c gsutil -a '(gcloud_sdk_argcomplete)'
   end
 
-  . $DOTFILES_DIR/gcloud_sdk_argcomplete.fish
-  complete -f -c gcloud -a '(gcloud_sdk_argcomplete)'
-  complete -x -c gsutil -a '(gcloud_sdk_argcomplete)'
+  . "$DOTFILES_DIR/.shellrc.config"
 
   [ -r "$HOME/.config/fish/once.local.fish" ] && . "$HOME/.config/fish/once.local.fish"
-end
-
-function alias_if_needed
-  set gcmd "g$argv[1]"
-  set path_to "(which $gcmd 2>/dev/null)"
-  if type -q $gcmd
-    export _$argv[1]=$gcmd
-  else
-    export _$argv[1]=$argv[1]
-  end
-end
-
-. "$DOTFILES_DIR/.shellrc.common"
-
-alias sr=". $HOME/.config/fish/config.fish"
-
-bind -k nul forward-char
-
-export FZF_DEFAULT_COMMAND='ag $dir -g "" -U --hidden --ignore ".git/" 2>/dev/null'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-if type -q fd
-  export FZF_ALT_C_COMMAND='fd $dir --type d --hidden --exclude ".git" 2>/dev/null'
 end
 
 #######################################################################
@@ -97,6 +85,35 @@ function _tide_item_prompt_pwd
     _tide_print_item prompt_pwd (string join -- / $split_pwd_for_output)
   end
 end
+
+#######################################################################
+#                          when interactive                           #
+#######################################################################
+
+if status --is-interactive
+
+function alias_if_needed
+  set gcmd "g$argv[1]"
+  set path_to "(which $gcmd 2>/dev/null)"
+  if type -q $gcmd
+    export _$argv[1]=$gcmd
+  else
+    export _$argv[1]=$argv[1]
+  end
+end
+
+. "$DOTFILES_DIR/.shellrc.common"
+
+alias sr=". $HOME/.config/fish/config.fish"
+
+bind -k nul forward-char
+
+export FZF_DEFAULT_COMMAND='ag $dir -g "" -U --hidden --ignore ".git/" 2>/dev/null'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+if type -q fd
+  export FZF_ALT_C_COMMAND='fd $dir --type d --hidden --exclude ".git" 2>/dev/null'
+end
+
 
 #######################################################################
 #                           IntelliJ propt                            #
@@ -388,3 +405,5 @@ abbr -a c           cd_hist
 abbr -a c-          cd -
 
 [ -r "$HOME/.config/fish/config.local.fish" ] && . "$HOME/.config/fish/config.local.fish"
+
+end

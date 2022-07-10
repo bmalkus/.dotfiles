@@ -9,6 +9,7 @@ alias_if_needed()
   fi
 }
 
+. "$DOTFILES_DIR/.shellrc.config"
 . "$DOTFILES_DIR/.shellrc.common"
 
 alias c='local_cd_hist'
