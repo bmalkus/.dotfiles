@@ -9,6 +9,8 @@ if status --is-interactive && [ -z "$_DOTFILES_ONCE_" ]
 
     echo 1 1 1 1 1 1 y | tide configure > /dev/null
   end
+
+  exec fish
 end
 
 if [ -z "$_DOTFILES_ONCE_ON_START_" ]
