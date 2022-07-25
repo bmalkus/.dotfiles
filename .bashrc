@@ -21,7 +21,7 @@ prompt_command()
   fi
 }
 
-[[ ! $PROMPT_COMMAND =~ "__dir_history" ]] && PROMPT_COMMAND="$PROMPT_COMMAND prompt_command; __dir_history;"
+[[ ! $PROMPT_COMMAND =~ "__dir_history" ]] && PROMPT_COMMAND="$PROMPT_COMMAND; prompt_command; __dir_history;"
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
