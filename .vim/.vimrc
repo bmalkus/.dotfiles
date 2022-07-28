@@ -201,6 +201,10 @@ let delimitMate_balance_matchpairs=1
 let delimitMate_matchpairs = "(:),[:],{:}"
 let delimitMate_smart_matchpairs = '^\%(\w\|[£$]\|[^[:space:][:punct:]]\)'
 
+if empty(maparg('<CR>', 'i'))
+  imap <CR> <Plug>delimitMateCR
+endif
+
 au FileType python let b:delimitMate_nesting_quotes = ['"', "'"]
 
 imap <C-k> <Plug>delimitMateJumpMany
@@ -455,7 +459,7 @@ else
           \ 'sink*': function("s:mru_sink"),
           \ 'options': '-m -x +s --prompt "' . s:git_root_or_cwd() .
           \ ' (MRU)> " --ansi --expect='.join(keys(s:default_action), ','),
-          \ 'window': { 'width': 0.9, 'height': 0.6 },
+          \ 'down': '40%',
           \ 'preview': ['right:50%', 'ctrl-/']
           \ })
   endfunction
