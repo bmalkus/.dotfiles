@@ -150,13 +150,20 @@ endif
 
 " }}}
 
-" -------- vim-easymotion ------ {{{
+" -------- easier motions ------ {{{
+
+Plug 'justinmk/vim-sneak'
+
+map f <Plug>Sneak_f
+map F <Plug>Sneak_F
+map t <Plug>Sneak_t
+map T <Plug>Sneak_T
 
 if v:version >= 703
   Plug 'easymotion/vim-easymotion'
 
   if version >= 703
-    nmap <leader>f <Plug>(easymotion-sn)
+    nmap <leader>f <Plug>(easymotion-s2)
 
     let g:EasyMotion_off_screen_search = 0
     let g:EasyMotion_inc_highlight = 1
@@ -219,6 +226,8 @@ imap <C-j> <C-k><CR>
 Plug 'machakann/vim-swap'
 Plug 'machakann/vim-sandwich'
 Plug 'machakann/vim-textobj-delimited'
+
+Plug 'wellle/targets.vim'
 
 if s:plugin_installed('vim-sandwich')
 
