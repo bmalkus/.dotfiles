@@ -31,7 +31,7 @@ end
 #                               prompt                                #
 #######################################################################
 
-set tide_left_prompt_items anaconda virtual_env context prompt_pwd git status cmd_duration character
+set tide_left_prompt_items virtual_env context prompt_pwd git status cmd_duration character
 [ $PROMPT_GIT_INFO = 0  ] && set -e tide_left_prompt_items[5]
 # set tide_right_prompt_items time
 set tide_right_prompt_items
@@ -43,12 +43,6 @@ set tide_anaconda_color FFAB76
 set tide_anaconda_bg_color normal
 # set tide_pwd_color_anchors 00AFFF
 # set tide_pwd_color_dirs 0087AF
-
-function _tide_item_anaconda
-  if test -n "$CONDA_DEFAULT_ENV"
-    _tide_print_item anaconda "$CONDA_DEFAULT_ENV"
-  end
-end
 
 function _tide_item_prompt_pwd
   set -l split_pwd (string replace -- $HOME '~' $PWD | string split /)
@@ -168,7 +162,6 @@ function __virtual_env_info
   if [ -n "$VIRTUAL_ENV" ]
     set ret (basename $VIRTUAL_ENV)
   end
-  [ -n "$CONDA_DEFAULT_ENV" ] && set ret $CONDA_DEFAULT_ENV
   [ -n "$ret" ] && echo -ns $ret (__sep)
 end
 

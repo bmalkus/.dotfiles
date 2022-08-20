@@ -2,7 +2,7 @@ export DOTFILES_DIR="$HOME/.dotfiles"
 
 . "$DOTFILES_DIR/.shellrc.bash.zsh"
 
-[ $(less -V | head -n1 | cut -f2 -d' ') -ge 530 ] && export LESS=${LESS}F
+[[ $(less -V | head -n1 | cut -f2 -d' ') -ge 530 ]] && export LESS=${LESS}F
 
 if [[ ! $(uname -s) =~ Darwin || $_ls == "gls" ]]; then
   alias ls='$_ls --color=auto'
