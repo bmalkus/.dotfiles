@@ -153,6 +153,9 @@ endif
 " -------- easier motions ------ {{{
 
 Plug 'justinmk/vim-sneak'
+Plug 'bkad/CamelCaseMotion'
+
+let g:camelcasemotion_key = 'g'
 
 map <leader>s <Plug>Sneak_s
 map <leader>S <Plug>Sneak_S
