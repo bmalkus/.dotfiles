@@ -253,7 +253,8 @@ export MARKPATH=$HOME/.marks
 
 function jump
   if [ -z $argv[1] ]
-    ls -l "$MARKPATH" | tr -s ' ' | cut -d' ' -f9- | awk NF | awk -F ' -> ' '{printf "    %-10s -> %s\n", $1, $2}'
+    # ls -l "$MARKPATH" | tr -s ' ' | cut -d' ' -f9- | awk NF | awk -F ' -> ' '{printf "    %-10s -> %s\n", $1, $2}'
+    ls "$MARKPATH" | xargs -I'{}' sh -c 'printf "    %-10s -> %s\n" {} "$(readlink -f "$MARKPATH/{}")"'
   else
     if ! cd "$MARKPATH/$argv[1]"
       echo "No such mark: $argv[1]"
