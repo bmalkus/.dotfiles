@@ -375,7 +375,7 @@ else
   endfunction
 
   function! s:git_root_or_cwd()
-    return (exists('b:git_dir') && ! empty(b:git_dir)) ? fugitive#repo().tree() : getcwd()
+    return (exists('b:git_dir') && ! empty(b:git_dir)) ? FugitiveFind(':/') : getcwd()
   endfunction
 
   " expands path relatively to cwd or git root if possible
