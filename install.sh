@@ -5,11 +5,20 @@ if ! command -v git >/dev/null 2>&1; then
   exit 1
 fi
 
-target_dir="$HOME/.dotfiles"
-
-if [ ! -d $target_dir/.git ]; then
-  git clone --recursive https://github.com/bmalkus/.dotfiles "$target_dir"
-fi
+readArgs() {
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+    -with-fzf)
+      WITH_FZF=true
+      ;;
+    *)
+      echo "Unknown argument: $1"
+      exit 1
+      ;;
+    esac
+    shift
+  done
+}
 
 _install()
 {
@@ -27,23 +36,32 @@ _install_cp()
   cp "$1" .
 }
 
+TARGET_DIR="$HOME/.dotfiles"
+WITH_FZF=false
+
+readArgs "$@"
+
+if [ ! -d $TARGET_DIR/.git ]; then
+  git clone --recursive https://github.com/bmalkus/.dotfiles "$TARGET_DIR"
+fi
+
 cd
 
-_install "$target_dir/.gitconfig"
+_install "$TARGET_DIR/.gitconfig"
 
-_install "$target_dir/.zshrc"
-_install "$target_dir/.bashrc"
+_install "$TARGET_DIR/.zshrc"
+_install "$TARGET_DIR/.bashrc"
 
-_install "$target_dir/.tmux.conf"
+_install "$TARGET_DIR/.tmux.conf"
 
-_install "$target_dir/.vim"
-_install "$target_dir/.vim/.vimrc"
+_install "$TARGET_DIR/.vim"
+_install "$TARGET_DIR/.vim/.vimrc"
 
-_install "$target_dir/.terminfo"
+_install "$TARGET_DIR/.terminfo"
 
 if [[ $(uname -s) =~ Darwin ]]; then
   if cd $HOME/Library/Filters/ 2>/dev/null; then
-    for f in $target_dir/filters/*; do
+    for f in $TARGET_DIR/filters/*; do
       _install_cp "$f"
     done
   else
@@ -54,10 +72,16 @@ fi
 mkdir -p $HOME/.config/fish/
 cd $HOME/.config/fish/
 
-_install "$target_dir/config.fish"
-_install "$target_dir/fish_plugins"
+_install "$TARGET_DIR/config.fish"
+_install "$TARGET_DIR/fish_plugins"
 
-if [ ! -f "$target_dir/.vim/vim-plug/autoload/plug.vim" ]; then
+if [[ $WITH_FZF = true ]] && [[ ! -d "$TARGET_DIR/.fzf/.git" ]]; then
+  echo "Downloading and installing FZF"
+  git clone --depth 1 https://github.com/junegunn/fzf.git "$TARGET_DIR/.fzf"
+  "$TARGET_DIR/.fzf/install" --key-bindings --completion --no-update-rc
+fi
+
+if [ ! -f "$TARGET_DIR/.vim/vim-plug/autoload/plug.vim" ]; then
   echo "Downloading plug.vim"
-  curl -#fLo "$target_dir/.vim/vim-plug/autoload/plug.vim" --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  curl -#fLo "$TARGET_DIR/.vim/vim-plug/autoload/plug.vim" --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 fi

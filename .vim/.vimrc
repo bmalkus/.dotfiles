@@ -344,7 +344,7 @@ endif
 " ---------- fzf/ctrlp --------- {{{
 
 if !empty($VIM_FZF) && $VIM_FZF != "0"
-  Plug 'junegunn/fzf', { 'do': './install --all' }
+  Plug 'junegunn/fzf', { 'dir': $DOTFILES_DIR . '/.fzf', 'do': './install --key-bindings --completion --no-update-rc' }
   Plug 'junegunn/fzf.vim'
 endif
 Plug 'kien/ctrlp.vim'
