@@ -3,627 +3,629 @@
 set nocompatible
 filetype off
 
-set rtp+=~/.vim/vim-plug
-let path='~/.vim/plugged'
+if has('eval')
+  set rtp+=~/.vim/vim-plug
+  let path='~/.vim/plugged'
 
-call plug#begin(path)
+  call plug#begin(path)
 
-let s:delayed_initializers = []
+  let s:delayed_initializers = []
 
-function! s:add_delayed_initializer(init)
-  call add(s:delayed_initializers, a:init)
-endfunction
-
-function! s:delayed_init()
-  for Init in s:delayed_initializers
-    call Init()
-  endfor
-endfunction
-
-" change leader key
-let mapleader=" "
-let maplocalleader=" "
-
-function! s:has_patch(version, patch)
-  return version > a:version || (version == a:version && has('patch' . a:patch))
-endfunction
-
-function! s:plugin_installed(plugin)
-  return has_key(g:plugs, a:plugin) && isdirectory(g:plugs[a:plugin].dir)
-endfunction
-
-" ---------- nerdtree ---------- {{{
-
-if v:version >= 703
-
-  Plug 'scrooloose/nerdtree'
-
-  let g:NERDTreeMouseMode = 2
-  let g:NERDTreeMapJumpLastChild = '<C-f>'
-  let g:NERDTreeMapJumpFirstChild = '<C-b>'
-  let g:NERDTreeMapJumpNextSibling = 'J'
-  let g:NERDTreeMapJumpPrevSibling = 'K'
-  let g:NERDMenuMode = 3
-  let g:NERDTreeCascadeSingleChildDir = 0
-  let g:NERDTreeRespectWildIgnore = 1
-
-  augroup my_nerdtree_maps
-    au!
-    autocmd FileType nerdtree nmap <buffer> <C-v> s
-    autocmd FileType nerdtree nmap <buffer> <C-x> i
-    autocmd FileType nerdtree nmap <buffer> <C-p> k
-    autocmd FileType nerdtree nmap <buffer> . I
-    autocmd FileType nerdtree nmap <buffer> <leader><tab> q
-    autocmd BufWinEnter NERD_tree_* let b:NERDTree._previousBuf = bufname('#')
-    autocmd BufUnload NERD_tree_* unlet t:netrwNERDTree
-    if s:has_patch(704, 605)
-      autocmd BufWinLeave NERD_tree_* if bufexists(b:NERDTree._previousBuf) | let @# = bufnr(b:NERDTree._previousBuf) | endif
-      autocmd BufWinEnter * if bufname('#') == bufname('%') && exists('b:_prev_buffer') | let @# = bufnr(b:_prev_buffer) | endif
-    else
-      autocmd BufWinLeave NERD_tree_* if bufexists(b:NERDTree._previousBuf) | exec 'b ' . b:NERDTree._previousBuf | b# | endif
-      autocmd BufWinEnter * if bufname('#') == bufname('%') && exists('b:_prev_buffer') | exec 'b ' . b:_prev_buffer | b# | call setpos('.', b:_prev_pos) | endif
-      autocmd BufWinLeave * let b:_prev_pos = getpos('.')
-    endif
-    autocmd BufWinEnter * if bufexists(bufnr('#')) | let b:_prev_buffer = bufname('#') | endif
-  augroup END
-
-  function! NERDTreeEnableOrToggle()
-    try
-      NERDTreeToggle
-    catch
-      silent! NERDTree
-    endtry
+  function! s:add_delayed_initializer(init)
+    call add(s:delayed_initializers, a:init)
   endfunction
 
-  function! NERDTreeNewOrReuse()
-    if exists('t:netrwNERDTree')
-      exec "b " . t:netrwNERDTree
-    else
-      e .
-      let t:netrwNERDTree = bufname('%')
-    endif
+  function! s:delayed_init()
+    for Init in s:delayed_initializers
+      call Init()
+    endfor
   endfunction
 
-  map <C-n> :<C-r>=&ft == 'nerdtree' ? 'normal q' : 'call NERDTreeNewOrReuse()'<CR><CR>
+  " change leader key
+  let mapleader=" "
+  let maplocalleader=" "
 
-  function! NERDTreeFindCurrentBuffer()
-    let path = expand("%:p")
-    call NERDTreeNewOrReuse()
-    try
-      let p = g:NERDTreePath.New(path)
-      if !p.isUnder(b:NERDTree.root.path)
-        call b:NERDTree.changeRoot(g:NERDTreeDirNode.New(p.getParent(), b:NERDTree))
-      endif
-      if p.isUnixHiddenFile()
-        call b:NERDTree.ui.setShowHidden(1)
+  function! s:has_patch(version, patch)
+    return version > a:version || (version == a:version && has('patch' . a:patch))
+  endfunction
+
+  function! s:plugin_installed(plugin)
+    return has_key(g:plugs, a:plugin) && isdirectory(g:plugs[a:plugin].dir)
+  endfunction
+
+  " ---------- nerdtree ---------- {{{
+
+  if v:version >= 703
+
+    Plug 'scrooloose/nerdtree'
+
+    let g:NERDTreeMouseMode = 2
+    let g:NERDTreeMapJumpLastChild = '<C-f>'
+    let g:NERDTreeMapJumpFirstChild = '<C-b>'
+    let g:NERDTreeMapJumpNextSibling = 'J'
+    let g:NERDTreeMapJumpPrevSibling = 'K'
+    let g:NERDMenuMode = 3
+    let g:NERDTreeCascadeSingleChildDir = 0
+    let g:NERDTreeRespectWildIgnore = 1
+
+    augroup my_nerdtree_maps
+      au!
+      autocmd FileType nerdtree nmap <buffer> <C-v> s
+      autocmd FileType nerdtree nmap <buffer> <C-x> i
+      autocmd FileType nerdtree nmap <buffer> <C-p> k
+      autocmd FileType nerdtree nmap <buffer> . I
+      autocmd FileType nerdtree nmap <buffer> <leader><tab> q
+      autocmd BufWinEnter NERD_tree_* let b:NERDTree._previousBuf = bufname('#')
+      autocmd BufUnload NERD_tree_* unlet t:netrwNERDTree
+      if s:has_patch(704, 605)
+        autocmd BufWinLeave NERD_tree_* if bufexists(b:NERDTree._previousBuf) | let @# = bufnr(b:NERDTree._previousBuf) | endif
+        autocmd BufWinEnter * if bufname('#') == bufname('%') && exists('b:_prev_buffer') | let @# = bufnr(b:_prev_buffer) | endif
       else
-        let tmp_p = p.getParent()
-        while tmp_p.isUnder(b:NERDTree.root.path)
-          if tmp_p.isUnixHiddenFile()
-            call b:NERDTree.ui.setShowHidden(1)
-            break
-          endif
-          let tmp_p = tmp_p.getParent()
-        endwhile
+        autocmd BufWinLeave NERD_tree_* if bufexists(b:NERDTree._previousBuf) | exec 'b ' . b:NERDTree._previousBuf | b# | endif
+        autocmd BufWinEnter * if bufname('#') == bufname('%') && exists('b:_prev_buffer') | exec 'b ' . b:_prev_buffer | b# | call setpos('.', b:_prev_pos) | endif
+        autocmd BufWinLeave * let b:_prev_pos = getpos('.')
       endif
-      let node = b:NERDTree.root.reveal(p)
-      call b:NERDTree.render()
-      call node.putCursorHere(1,0)
-    catch /NERDTree.InvalidArgumentsError/
-      let path = fnamemodify(path, ':h')
-      let p = g:NERDTreePath.New(path)
-      let dir = g:NERDTreeDirNode.New(p, b:NERDTree)
-      if !p.isUnder(b:NERDTree.root.path)
-        call b:NERDTree.changeRoot(dir)
-      endif
-      call b:NERDTree.render()
-    endtry
-  endfunction
-
-  nmap n :<C-r>=&ft == 'nerdtree' ? 'normal q' : 'call NERDTreeFindCurrentBuffer()'<CR><CR>
-
-  function! s:runtime_nerdtree_mappings()
-    try
-      " seems that not on all versions it loads automatically
-      runtime after/plugin/NERDTreeMappings.vim
-    catch
-    endtry
-  endfunction
-
-  call s:add_delayed_initializer(function('s:runtime_nerdtree_mappings'))
-
-endif
-
-" }}}
-
-" ---------- undotree ---------- {{{
-
-if v:version >= 703
-
-  Plug 'mbbill/undotree'
-
-  let g:undotree_SetFocusWhenToggle = 1
-
-  nnoremap u :UndotreeToggle<CR>
-
-endif
-
-" }}}
-
-" -------- easier motions ------ {{{
-
-Plug 'justinmk/vim-sneak'
-Plug 'bkad/CamelCaseMotion'
-
-let g:camelcasemotion_key = 'g'
-
-map <leader>s <Plug>Sneak_s
-map <leader>S <Plug>Sneak_S
-map f <Plug>Sneak_f
-map F <Plug>Sneak_F
-map t <Plug>Sneak_t
-map T <Plug>Sneak_T
-
-if v:version >= 703
-  Plug 'easymotion/vim-easymotion'
-
-  if version >= 703
-    nmap <leader>f <Plug>(easymotion-s2)
-
-    let g:EasyMotion_off_screen_search = 0
-    let g:EasyMotion_inc_highlight = 1
-    let g:EasyMotion_history_highlight = 0
-  endif
-endif
-
-" }}}
-
-" ------------ python ---------- {{{
-
-Plug 'hynek/vim-python-pep8-indent'
-
-" }}}
-
-" ---------- ultisnips --------- {{{
-
-if v:version >= 800 && ( has('python3') || has('python') )
-
-  Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-
-  let g:UltiSnipsExpandTrigger = 'e'
-  let g:UltiSnipsListSnippets = 's'
-  let g:UltiSnipsJumpForwardTrigger = 'f'
-  let g:UltiSnipsJumpBackwardTrigger = 'b'
-
-  let g:UltiSnipsEditSplit = 'vertical'
-  let g:UltiSnipsSnippetsDir = $DOTFILES_DIR . '/.vim/UltiSnips'
-
-endif
-
-" }}}
-
-" --------- delimitMate -------- {{{
-
-Plug 'Raimondi/delimitMate'
-
-let delimitMate_expand_cr=1
-let delimitMate_expand_space=1
-let delimitMate_jump_expansion = 1
-let delimitMate_balance_matchpairs=1
-let delimitMate_matchpairs = "(:),[:],{:}"
-let delimitMate_smart_matchpairs = '^\%(\w\|[£$]\|[^[:space:][:punct:]]\)'
-
-if empty(maparg('<CR>', 'i'))
-  imap <CR> <Plug>delimitMateCR
-endif
-
-au FileType python let b:delimitMate_nesting_quotes = ['"', "'"]
-
-imap <C-k> <Plug>delimitMateJumpMany
-imap <C-l> <Plug>delimitMateS-Tab
-imap <C-h> <Plug>delimitMateS-BS
-imap <C-j> <C-k><CR>
-
-" }}}
-
-" --------- text objects ------- {{{
-
-Plug 'machakann/vim-swap'
-Plug 'machakann/vim-sandwich'
-Plug 'machakann/vim-textobj-delimited'
-
-Plug 'wellle/targets.vim'
-
-if s:plugin_installed('vim-sandwich')
-
-  let g:sandwich_no_default_key_mappings = 1
-  let g:operator_sandwich_no_default_key_mappings = 1
-  let g:textobj_sandwich_no_default_key_mappings = 1
-
-  function! s:init_vim_sandwich()
-    runtime macros/sandwich/keymap/surround.vim
-
-    omap ic <Plug>(textobj-sandwich-auto-i)
-    xmap ic <Plug>(textobj-sandwich-auto-i)
-    omap ac <Plug>(textobj-sandwich-auto-a)
-    xmap ac <Plug>(textobj-sandwich-auto-a)
-
-    omap ia <Plug>(textobj-sandwich-function-ip)
-    xmap ia <Plug>(textobj-sandwich-function-ip)
-    omap aa <Plug>(textobj-sandwich-function-ap)
-    xmap aa <Plug>(textobj-sandwich-function-ap)
-    omap if <Plug>(textobj-sandwich-function-i)
-    xmap if <Plug>(textobj-sandwich-function-i)
-    omap af <Plug>(textobj-sandwich-function-a)
-    xmap af <Plug>(textobj-sandwich-function-a)
-
-    let g:sandwich#recipes += [
-      \   {
-      \     'buns': ['(', ')'],
-      \     'cursor': 'head',
-      \     'command': ['startinsert'],
-      \     'kind': ['add', 'replace'],
-      \     'action': ['add'],
-      \     'input': ['F']
-      \   },
-      \ ]
-
-    augroup sandwich-ft-mine
-      autocmd Filetype python let b:sandwich_magicchar_f_patterns = [
-            \   {
-            \     'header' : '\<\%(\h\k*\.\)*\h\k*',
-            \     'bra'    : '(',
-            \     'ket'    : ')',
-            \     'footer' : '',
-            \   },
-            \ ]
-
-      autocmd Filetype cpp let b:sandwich_magicchar_f_patterns = [
-            \   {
-            \     'header' : '\<\h\([.>:]\|\k\)*',
-            \     'bra'    : '(',
-            \     'ket'    : ')',
-            \     'footer' : '',
-            \   },
-            \ ]
-
-      autocmd Filetype vim let b:sandwich_magicchar_f_patterns = [
-            \   {
-            \     'header' : '\C\<\%(\h\|[sa]:\h\|g:[A-Z]\)\k*',
-            \     'bra'    : '(',
-            \     'ket'    : ')',
-            \     'footer' : '',
-            \   },
-            \ ]
+      autocmd BufWinEnter * if bufexists(bufnr('#')) | let b:_prev_buffer = bufname('#') | endif
     augroup END
 
-  endfunction
+    function! NERDTreeEnableOrToggle()
+      try
+        NERDTreeToggle
+      catch
+        silent! NERDTree
+      endtry
+    endfunction
 
-  call s:add_delayed_initializer(function('s:init_vim_sandwich'))
+    function! NERDTreeNewOrReuse()
+      if exists('t:netrwNERDTree')
+        exec "b " . t:netrwNERDTree
+      else
+        e .
+        let t:netrwNERDTree = bufname('%')
+      endif
+    endfunction
 
-  omap i, <Plug>(swap-textobject-i)
-  xmap i, <Plug>(swap-textobject-i)
-  omap a, <Plug>(swap-textobject-a)
-  xmap a, <Plug>(swap-textobject-a)
+    map <C-n> :<C-r>=&ft == 'nerdtree' ? 'normal q' : 'call NERDTreeNewOrReuse()'<CR><CR>
 
-  function! AddArgument(where)
-    if index(['<<', '>>'], a:where) >= 0
-      call sandwich#magicchar#f#ap()
-    elseif index(['<', '>'], a:where) >= 0
-      call swap#textobj#select('i')
-    endif
-
-    if mode() != 'v'
-      return
-    endif
-
-    exe "normal! \<esc>"
-
-    if a:where[0] ==# '>'
-      let pos = getpos("'>")
-      let pos[2] += 1
-      call setpos('.', pos)
-      execute "normal! i, \<esc>l"
-    elseif a:where[0] ==# '<'
-      let pos = getpos("'<")
-      call setpos('.', pos)
-      execute "normal! i, \<esc>h"
-    endif
-    startinsert
-  endfunction
-
-  nnoremap <silent> g,i :call AddArgument('<')<CR>
-  nnoremap <silent> g,a :call AddArgument('>')<CR>
-  nnoremap <silent> g,I :call AddArgument('<<')<CR>
-  nnoremap <silent> g,A :call AddArgument('>>')<CR>
-
-endif
-
-" }}}
-
-" ---------- fzf/ctrlp --------- {{{
-
-if !empty($VIM_FZF) && $VIM_FZF != "0"
-  Plug 'junegunn/fzf', { 'dir': $DOTFILES_DIR . '/.fzf', 'do': './install --key-bindings --completion --no-update-rc' }
-  Plug 'junegunn/fzf.vim'
-endif
-Plug 'kien/ctrlp.vim'
-
-let g:ctrlp_cmd = 'CtrlPMRU'
-let g:ctrlp_working_path_mode = 'ra'
-
-nmap <leader>b <C-b>
-
-if !executable('fzf') || empty($VIM_FZF) || $VIM_FZF == "0"
-
-  nnoremap <silent> <C-b> :CtrlPBuffer<CR>
-  nnoremap <silent> <C-f> :CtrlP<CR>
-
-else
-
-  function! s:full_path(dir_or_file)
-    " if fnamemodify() applied once, full_path may look like /blah/../ when a:dir_or_file is '..'
-    return fnamemodify(fnamemodify(a:dir_or_file, ':p'), ':p')
-  endfunction
-
-  function! s:mru_list_without_nonexistent()
-    if empty(expand('%')) || &readonly
-      let mru_list = ctrlp#mrufiles#list()
-    else
-      let mru_list = ctrlp#mrufiles#list()[1:]
-    endif
-    let cwd = fnameescape(getcwd())
-    call filter(mru_list, '!empty(findfile(v:val, cwd))')
-    return mru_list
-  endfunction
-
-  function! s:git_root_or_cwd()
-    return (exists('b:git_dir') && ! empty(b:git_dir)) ? FugitiveFind(':/') : getcwd()
-  endfunction
-
-  " expands path relatively to cwd or git root if possible
-  " (similar to CtrlP plugin)
-  function! s:relpath(filepath_or_name)
-    let fullpath = fnamemodify(a:filepath_or_name, ':p')
-    let save_cwd = fnameescape(getcwd())
-    let cdCmd = (haslocaldir() ? 'lcd!' : 'cd!')
-    try
-      exec cdCmd . fnameescape(s:git_root_or_cwd())
-      let ret = fnamemodify(fullpath, ':.')
-    finally
-      exec cdCmd . save_cwd
-    endtry
-    return ret
-  endfunction
-
-  function! s:ansi(str, col, bold)
-    return printf("\x1b[%s%sm%s\x1b[m", a:col, a:bold ? ';1' : '', a:str)
-  endfunction
-
-  for [s:c, s:a] in items({'black': 30, 'red': 31, 'green': 32, 'yellow': 33, 'blue': 34, 'magenta': 35, 'cyan': 36})
-    exec "function! s:".s:c."(str, ...)\n"
-          \ "  return s:ansi(a:str, ".s:a.", get(a:, 1, 0))\n"
-          \ "endfunction"
-  endfor
-
-  function! s:color_path(path)
-    if a:path =~ '^/'
-      return s:cyan(a:path)
-    else
-      return s:yellow(a:path)
-    endif
-  endfunction
-
-  let s:default_action = {
-        \ 'ctrl-t': 'tab split',
-        \ 'ctrl-x': 'split',
-        \ 'ctrl-v': 'vsplit' }
-
-  " below function is used in order to get actions like ctrl-v etc.
-  " and to transform path to proper version
-  function! s:mru_sink(lines)
-    if len(a:lines) <= 1
-      return
-    endif
-    let key = remove(a:lines, 0)
-    let cmd = get(s:default_action, key, 'e')
-    let save_cwd = fnameescape(getcwd())
-    let cdCmd = (haslocaldir() ? 'lcd!' : 'cd!')
-    try
-      exec cdCmd . fnameescape(s:git_root_or_cwd())
-      let full_path_lines = map(a:lines, 'fnameescape(fnamemodify(v:val, ":p"))')
-    finally
-      exec cdCmd . save_cwd
-    endtry
-    if len(a:lines) > 1
-      augroup fzf_swap
-        autocmd SwapExists *
-              \ let v:swapchoice='o'
-              \| let b:swapname = v:swapname
-      augroup END
-    endif
-    let empty = empty(expand('%')) && line('$') == 1 && empty(getline(1)) && !&modified
-    try
-      for item in full_path_lines
-        if empty
-          exec 'e' item
-          let empty = 0
+    function! NERDTreeFindCurrentBuffer()
+      let path = expand("%:p")
+      call NERDTreeNewOrReuse()
+      try
+        let p = g:NERDTreePath.New(path)
+        if !p.isUnder(b:NERDTree.root.path)
+          call b:NERDTree.changeRoot(g:NERDTreeDirNode.New(p.getParent(), b:NERDTree))
+        endif
+        if p.isUnixHiddenFile()
+          call b:NERDTree.ui.setShowHidden(1)
         else
-          exec cmd item
+          let tmp_p = p.getParent()
+          while tmp_p.isUnder(b:NERDTree.root.path)
+            if tmp_p.isUnixHiddenFile()
+              call b:NERDTree.ui.setShowHidden(1)
+              break
+            endif
+            let tmp_p = tmp_p.getParent()
+          endwhile
         endif
-        if exists('b:swapname')
-          augroup swap_exists_once
-            autocmd InsertEnter <buffer>
-                  \ echohl ErrorMsg
-                  \| echom 'E325: swap file exists: ' . b:swapname
-                  \| sleep 2
-                  \| echohl None
-                  \| autocmd! swap_exists_once
-          augroup END
+        let node = b:NERDTree.root.reveal(p)
+        call b:NERDTree.render()
+        call node.putCursorHere(1,0)
+      catch /NERDTree.InvalidArgumentsError/
+        let path = fnamemodify(path, ':h')
+        let p = g:NERDTreePath.New(path)
+        let dir = g:NERDTreeDirNode.New(p, b:NERDTree)
+        if !p.isUnder(b:NERDTree.root.path)
+          call b:NERDTree.changeRoot(dir)
         endif
-      endfor
-    finally
-      silent! autocmd! fzf_swap
-    endtry
-  endfunction
+        call b:NERDTree.render()
+      endtry
+    endfunction
 
-  function! s:fzf_mru()
-    call fzf#run({
-          \ 'source':  map(s:mru_list_without_nonexistent(), 's:color_path(s:relpath(v:val))'),
-          \ 'sink*': function("s:mru_sink"),
-          \ 'options': '-m -x +s --prompt "' . s:git_root_or_cwd() .
-          \ ' (MRU)> " --ansi --expect='.join(keys(s:default_action), ','),
-          \ 'down': '40%',
-          \ 'preview': ['right:50%', 'ctrl-/']
-          \ })
-  endfunction
+    nmap n :<C-r>=&ft == 'nerdtree' ? 'normal q' : 'call NERDTreeFindCurrentBuffer()'<CR><CR>
 
-  command! Mru call s:fzf_mru()
+    function! s:runtime_nerdtree_mappings()
+      try
+        " seems that not on all versions it loads automatically
+        runtime after/plugin/NERDTreeMappings.vim
+      catch
+      endtry
+    endfunction
 
-  cnoreabbrev rg Rg
+    call s:add_delayed_initializer(function('s:runtime_nerdtree_mappings'))
 
-  let g:ctrlp_map = ''
-
-  nnoremap <C-p> :Mru<CR>
-  nnoremap <C-b> :Buffers<CR>
-  nnoremap <leader>g :GFiles<CR>
-  nnoremap <leader>a :Files<CR>
-endif
-
-" }}}
-
-" --------- colors/themes ------ {{{
-
-Plug 'octol/vim-cpp-enhanced-highlight'
-
-Plug 'bling/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-
-let g:airline_left_sep=''
-let g:airline_right_sep=''
-
-let g:airline#extensions#whitespace#enabled = 0
-if $PROMPT_GIT_INFO == 0
-    let g:airline#extensions#branch#enabled = 0
-    let g:airline#extensions#fugitiveline#enabled = 0
-endif
-
-let g:cpp_experimental_template_highlight = 1
-let g:cpp_concepts_highlight = 1
-
-" }}}
-
-" ------------ tpope ----------- {{{
-
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-sleuth'
-Plug 'tpope/vim-unimpaired'
-Plug 'tpope/vim-endwise'
-Plug 'tpope/vim-rsi'
-Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-commentary'
-" for finding git root
-Plug 'tpope/vim-fugitive'
-
-let g:nremap = {"m": ""}
-
-autocmd FileType c,cpp setlocal commentstring=//\ %s
-
-function! s:python_setlocal()
-  augroup python_setlocal
-    autocmd!
-    autocmd FileType python setlocal expandtab shiftwidth=4 softtabstop=4 tabstop=8
-  augroup END
-  if &ft == 'python'
-  setlocal expandtab shiftwidth=4 softtabstop=4 tabstop=8
   endif
-endfunction
 
-call s:add_delayed_initializer(function('s:python_setlocal'))
+  " }}}
 
-" }}}
+  " ---------- undotree ---------- {{{
 
-" --------- golden-ratio ------- {{{
+  if v:version >= 703
 
-if !has('gui_macvim') && exists('*win_gettype')
+    Plug 'mbbill/undotree'
 
-  Plug 'roman/golden-ratio'
+    let g:undotree_SetFocusWhenToggle = 1
 
-endif
+    nnoremap u :UndotreeToggle<CR>
 
-" }}}
+  endif
 
-" ---------- easy-align -------- {{{
+  " }}}
 
-Plug 'junegunn/vim-easy-align'
+  " -------- easier motions ------ {{{
 
-xmap ga <Plug>(LiveEasyAlign)
-nmap ga <Plug>(LiveEasyAlign)
+  Plug 'justinmk/vim-sneak'
+  Plug 'bkad/CamelCaseMotion'
 
-" }}}
+  let g:camelcasemotion_key = 'g'
 
-" ---------- incsearch --------- {{{
+  map <leader>s <Plug>Sneak_s
+  map <leader>S <Plug>Sneak_S
+  map f <Plug>Sneak_f
+  map F <Plug>Sneak_F
+  map t <Plug>Sneak_t
+  map T <Plug>Sneak_T
 
-Plug 'haya14busa/incsearch.vim'
+  if v:version >= 703
+    Plug 'easymotion/vim-easymotion'
 
-if s:plugin_installed('incsearch.vim')
+    if version >= 703
+      nmap <leader>f <Plug>(easymotion-s2)
 
-  let g:incsearch#auto_nohlsearch = 1
+      let g:EasyMotion_off_screen_search = 0
+      let g:EasyMotion_inc_highlight = 1
+      let g:EasyMotion_history_highlight = 0
+    endif
+  endif
 
-  function! s:__enable_incsearch()
-    map /  <Plug>(incsearch-forward)
-    map ?  <Plug>(incsearch-backward)
-    map g/ <Plug>(incsearch-stay)
+  " }}}
 
-    map n  <Plug>(incsearch-nohl-n)
-    map N  <Plug>(incsearch-nohl-N)
-    map *  <Plug>(incsearch-nohl-*)
-    map #  <Plug>(incsearch-nohl-#)
-    map g* <Plug>(incsearch-nohl-g*)
-    map g# <Plug>(incsearch-nohl-g#)
-  endfunction
+  " ------------ python ---------- {{{
 
-  function! s:endisable_incsearch()
-    if g:__incsearch_enabled == 0
-      let g:__incsearch_enabled = 1
-      call s:__enable_incsearch()
-      set hlsearch
-      set incsearch
-      noh
-      echo 'Better incsearch enabled'
-    else
-      let g:__incsearch_enabled = 0
-      unmap /
-      unmap ?
-      unmap g/
-      unmap n
-      unmap N
-      unmap *
-      unmap #
-      unmap g*
-      unmap g#
+  Plug 'hynek/vim-python-pep8-indent'
 
-      set nohlsearch
-      set noincsearch
+  " }}}
 
-      echo 'Better incsearch disabled'
+  " ---------- ultisnips --------- {{{
+
+  if v:version >= 800 && ( has('python3') || has('python') )
+
+    Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+
+    let g:UltiSnipsExpandTrigger = 'e'
+    let g:UltiSnipsListSnippets = 's'
+    let g:UltiSnipsJumpForwardTrigger = 'f'
+    let g:UltiSnipsJumpBackwardTrigger = 'b'
+
+    let g:UltiSnipsEditSplit = 'vertical'
+    let g:UltiSnipsSnippetsDir = $DOTFILES_DIR . '/.vim/UltiSnips'
+
+  endif
+
+  " }}}
+
+  " --------- delimitMate -------- {{{
+
+  Plug 'Raimondi/delimitMate'
+
+  let delimitMate_expand_cr=1
+  let delimitMate_expand_space=1
+  let delimitMate_jump_expansion = 1
+  let delimitMate_balance_matchpairs=1
+  let delimitMate_matchpairs = "(:),[:],{:}"
+  let delimitMate_smart_matchpairs = '^\%(\w\|[£$]\|[^[:space:][:punct:]]\)'
+
+  if empty(maparg('<CR>', 'i'))
+    imap <CR> <Plug>delimitMateCR
+  endif
+
+  au FileType python let b:delimitMate_nesting_quotes = ['"', "'"]
+
+  imap <C-k> <Plug>delimitMateJumpMany
+  imap <C-l> <Plug>delimitMateS-Tab
+  imap <C-h> <Plug>delimitMateS-BS
+  imap <C-j> <C-k><CR>
+
+  " }}}
+
+  " --------- text objects ------- {{{
+
+  Plug 'machakann/vim-swap'
+  Plug 'machakann/vim-sandwich'
+  Plug 'machakann/vim-textobj-delimited'
+
+  Plug 'wellle/targets.vim'
+
+  if s:plugin_installed('vim-sandwich')
+
+    let g:sandwich_no_default_key_mappings = 1
+    let g:operator_sandwich_no_default_key_mappings = 1
+    let g:textobj_sandwich_no_default_key_mappings = 1
+
+    function! s:init_vim_sandwich()
+      runtime macros/sandwich/keymap/surround.vim
+
+      omap ic <Plug>(textobj-sandwich-auto-i)
+      xmap ic <Plug>(textobj-sandwich-auto-i)
+      omap ac <Plug>(textobj-sandwich-auto-a)
+      xmap ac <Plug>(textobj-sandwich-auto-a)
+
+      omap ia <Plug>(textobj-sandwich-function-ip)
+      xmap ia <Plug>(textobj-sandwich-function-ip)
+      omap aa <Plug>(textobj-sandwich-function-ap)
+      xmap aa <Plug>(textobj-sandwich-function-ap)
+      omap if <Plug>(textobj-sandwich-function-i)
+      xmap if <Plug>(textobj-sandwich-function-i)
+      omap af <Plug>(textobj-sandwich-function-a)
+      xmap af <Plug>(textobj-sandwich-function-a)
+
+      let g:sandwich#recipes += [
+        \   {
+        \     'buns': ['(', ')'],
+        \     'cursor': 'head',
+        \     'command': ['startinsert'],
+        \     'kind': ['add', 'replace'],
+        \     'action': ['add'],
+        \     'input': ['F']
+        \   },
+        \ ]
+
+      augroup sandwich-ft-mine
+        autocmd Filetype python let b:sandwich_magicchar_f_patterns = [
+              \   {
+              \     'header' : '\<\%(\h\k*\.\)*\h\k*',
+              \     'bra'    : '(',
+              \     'ket'    : ')',
+              \     'footer' : '',
+              \   },
+              \ ]
+
+        autocmd Filetype cpp let b:sandwich_magicchar_f_patterns = [
+              \   {
+              \     'header' : '\<\h\([.>:]\|\k\)*',
+              \     'bra'    : '(',
+              \     'ket'    : ')',
+              \     'footer' : '',
+              \   },
+              \ ]
+
+        autocmd Filetype vim let b:sandwich_magicchar_f_patterns = [
+              \   {
+              \     'header' : '\C\<\%(\h\|[sa]:\h\|g:[A-Z]\)\k*',
+              \     'bra'    : '(',
+              \     'ket'    : ')',
+              \     'footer' : '',
+              \   },
+              \ ]
+      augroup END
+
+    endfunction
+
+    call s:add_delayed_initializer(function('s:init_vim_sandwich'))
+
+    omap i, <Plug>(swap-textobject-i)
+    xmap i, <Plug>(swap-textobject-i)
+    omap a, <Plug>(swap-textobject-a)
+    xmap a, <Plug>(swap-textobject-a)
+
+    function! AddArgument(where)
+      if index(['<<', '>>'], a:where) >= 0
+        call sandwich#magicchar#f#ap()
+      elseif index(['<', '>'], a:where) >= 0
+        call swap#textobj#select('i')
+      endif
+
+      if mode() != 'v'
+        return
+      endif
+
+      exe "normal! \<esc>"
+
+      if a:where[0] ==# '>'
+        let pos = getpos("'>")
+        let pos[2] += 1
+        call setpos('.', pos)
+        execute "normal! i, \<esc>l"
+      elseif a:where[0] ==# '<'
+        let pos = getpos("'<")
+        call setpos('.', pos)
+        execute "normal! i, \<esc>h"
+      endif
+      startinsert
+    endfunction
+
+    nnoremap <silent> g,i :call AddArgument('<')<CR>
+    nnoremap <silent> g,a :call AddArgument('>')<CR>
+    nnoremap <silent> g,I :call AddArgument('<<')<CR>
+    nnoremap <silent> g,A :call AddArgument('>>')<CR>
+
+  endif
+
+  " }}}
+
+  " ---------- fzf/ctrlp --------- {{{
+
+  if !empty($VIM_FZF) && $VIM_FZF != "0"
+    Plug 'junegunn/fzf', { 'dir': $DOTFILES_DIR . '/.fzf', 'do': './install --key-bindings --completion --no-update-rc' }
+    Plug 'junegunn/fzf.vim'
+  endif
+  Plug 'kien/ctrlp.vim'
+
+  let g:ctrlp_cmd = 'CtrlPMRU'
+  let g:ctrlp_working_path_mode = 'ra'
+
+  nmap <leader>b <C-b>
+
+  if !executable('fzf') || empty($VIM_FZF) || $VIM_FZF == "0"
+
+    nnoremap <silent> <C-b> :CtrlPBuffer<CR>
+    nnoremap <silent> <C-f> :CtrlP<CR>
+
+  else
+
+    function! s:full_path(dir_or_file)
+      " if fnamemodify() applied once, full_path may look like /blah/../ when a:dir_or_file is '..'
+      return fnamemodify(fnamemodify(a:dir_or_file, ':p'), ':p')
+    endfunction
+
+    function! s:mru_list_without_nonexistent()
+      if empty(expand('%')) || &readonly
+        let mru_list = ctrlp#mrufiles#list()
+      else
+        let mru_list = ctrlp#mrufiles#list()[1:]
+      endif
+      let cwd = fnameescape(getcwd())
+      call filter(mru_list, '!empty(findfile(v:val, cwd))')
+      return mru_list
+    endfunction
+
+    function! s:git_root_or_cwd()
+      return (exists('b:git_dir') && ! empty(b:git_dir)) ? FugitiveFind(':/') : getcwd()
+    endfunction
+
+    " expands path relatively to cwd or git root if possible
+    " (similar to CtrlP plugin)
+    function! s:relpath(filepath_or_name)
+      let fullpath = fnamemodify(a:filepath_or_name, ':p')
+      let save_cwd = fnameescape(getcwd())
+      let cdCmd = (haslocaldir() ? 'lcd!' : 'cd!')
+      try
+        exec cdCmd . fnameescape(s:git_root_or_cwd())
+        let ret = fnamemodify(fullpath, ':.')
+      finally
+        exec cdCmd . save_cwd
+      endtry
+      return ret
+    endfunction
+
+    function! s:ansi(str, col, bold)
+      return printf("\x1b[%s%sm%s\x1b[m", a:col, a:bold ? ';1' : '', a:str)
+    endfunction
+
+    for [s:c, s:a] in items({'black': 30, 'red': 31, 'green': 32, 'yellow': 33, 'blue': 34, 'magenta': 35, 'cyan': 36})
+      exec "function! s:".s:c."(str, ...)\n"
+            \ "  return s:ansi(a:str, ".s:a.", get(a:, 1, 0))\n"
+            \ "endfunction"
+    endfor
+
+    function! s:color_path(path)
+      if a:path =~ '^/'
+        return s:cyan(a:path)
+      else
+        return s:yellow(a:path)
+      endif
+    endfunction
+
+    let s:default_action = {
+          \ 'ctrl-t': 'tab split',
+          \ 'ctrl-x': 'split',
+          \ 'ctrl-v': 'vsplit' }
+
+    " below function is used in order to get actions like ctrl-v etc.
+    " and to transform path to proper version
+    function! s:mru_sink(lines)
+      if len(a:lines) <= 1
+        return
+      endif
+      let key = remove(a:lines, 0)
+      let cmd = get(s:default_action, key, 'e')
+      let save_cwd = fnameescape(getcwd())
+      let cdCmd = (haslocaldir() ? 'lcd!' : 'cd!')
+      try
+        exec cdCmd . fnameescape(s:git_root_or_cwd())
+        let full_path_lines = map(a:lines, 'fnameescape(fnamemodify(v:val, ":p"))')
+      finally
+        exec cdCmd . save_cwd
+      endtry
+      if len(a:lines) > 1
+        augroup fzf_swap
+          autocmd SwapExists *
+                \ let v:swapchoice='o'
+                \| let b:swapname = v:swapname
+        augroup END
+      endif
+      let empty = empty(expand('%')) && line('$') == 1 && empty(getline(1)) && !&modified
+      try
+        for item in full_path_lines
+          if empty
+            exec 'e' item
+            let empty = 0
+          else
+            exec cmd item
+          endif
+          if exists('b:swapname')
+            augroup swap_exists_once
+              autocmd InsertEnter <buffer>
+                    \ echohl ErrorMsg
+                    \| echom 'E325: swap file exists: ' . b:swapname
+                    \| sleep 2
+                    \| echohl None
+                    \| autocmd! swap_exists_once
+            augroup END
+          endif
+        endfor
+      finally
+        silent! autocmd! fzf_swap
+      endtry
+    endfunction
+
+    function! s:fzf_mru()
+      call fzf#run({
+            \ 'source':  map(s:mru_list_without_nonexistent(), 's:color_path(s:relpath(v:val))'),
+            \ 'sink*': function("s:mru_sink"),
+            \ 'options': '-m -x +s --prompt "' . s:git_root_or_cwd() .
+            \ ' (MRU)> " --ansi --expect='.join(keys(s:default_action), ','),
+            \ 'down': '40%',
+            \ 'preview': ['right:50%', 'ctrl-/']
+            \ })
+    endfunction
+
+    command! Mru call s:fzf_mru()
+
+    cnoreabbrev rg Rg
+
+    let g:ctrlp_map = ''
+
+    nnoremap <C-p> :Mru<CR>
+    nnoremap <C-b> :Buffers<CR>
+    nnoremap <leader>g :GFiles<CR>
+    nnoremap <leader>a :Files<CR>
+  endif
+
+  " }}}
+
+  " --------- colors/themes ------ {{{
+
+  Plug 'octol/vim-cpp-enhanced-highlight'
+
+  Plug 'bling/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
+
+  let g:airline_left_sep=''
+  let g:airline_right_sep=''
+
+  let g:airline#extensions#whitespace#enabled = 0
+  if $PROMPT_GIT_INFO == 0
+      let g:airline#extensions#branch#enabled = 0
+      let g:airline#extensions#fugitiveline#enabled = 0
+  endif
+
+  let g:cpp_experimental_template_highlight = 1
+  let g:cpp_concepts_highlight = 1
+
+  " }}}
+
+  " ------------ tpope ----------- {{{
+
+  Plug 'tpope/vim-repeat'
+  Plug 'tpope/vim-sleuth'
+  Plug 'tpope/vim-unimpaired'
+  Plug 'tpope/vim-endwise'
+  Plug 'tpope/vim-rsi'
+  Plug 'tpope/vim-eunuch'
+  Plug 'tpope/vim-commentary'
+  " for finding git root
+  Plug 'tpope/vim-fugitive'
+
+  let g:nremap = {"m": ""}
+
+  autocmd FileType c,cpp setlocal commentstring=//\ %s
+
+  function! s:python_setlocal()
+    augroup python_setlocal
+      autocmd!
+      autocmd FileType python setlocal expandtab shiftwidth=4 softtabstop=4 tabstop=8
+    augroup END
+    if &ft == 'python'
+    setlocal expandtab shiftwidth=4 softtabstop=4 tabstop=8
     endif
   endfunction
 
-  call s:__enable_incsearch()
-  if !exists('g:__incsearch_enabled')
-    let g:__incsearch_enabled = 1
+  call s:add_delayed_initializer(function('s:python_setlocal'))
+
+  " }}}
+
+  " --------- golden-ratio ------- {{{
+
+  if !has('gui_macvim') && exists('*win_gettype')
+
+    Plug 'roman/golden-ratio'
+
   endif
 
-  nmap <silent> yo/ :call <SID>endisable_incsearch()<CR>
+  " }}}
 
+  " ---------- easy-align -------- {{{
+
+  Plug 'junegunn/vim-easy-align'
+
+  xmap ga <Plug>(LiveEasyAlign)
+  nmap ga <Plug>(LiveEasyAlign)
+
+  " }}}
+
+  " ---------- incsearch --------- {{{
+
+  Plug 'haya14busa/incsearch.vim'
+
+  if s:plugin_installed('incsearch.vim')
+
+    let g:incsearch#auto_nohlsearch = 1
+
+    function! s:__enable_incsearch()
+      map /  <Plug>(incsearch-forward)
+      map ?  <Plug>(incsearch-backward)
+      map g/ <Plug>(incsearch-stay)
+
+      map n  <Plug>(incsearch-nohl-n)
+      map N  <Plug>(incsearch-nohl-N)
+      map *  <Plug>(incsearch-nohl-*)
+      map #  <Plug>(incsearch-nohl-#)
+      map g* <Plug>(incsearch-nohl-g*)
+      map g# <Plug>(incsearch-nohl-g#)
+    endfunction
+
+    function! s:endisable_incsearch()
+      if g:__incsearch_enabled == 0
+        let g:__incsearch_enabled = 1
+        call s:__enable_incsearch()
+        set hlsearch
+        set incsearch
+        noh
+        echo 'Better incsearch enabled'
+      else
+        let g:__incsearch_enabled = 0
+        unmap /
+        unmap ?
+        unmap g/
+        unmap n
+        unmap N
+        unmap *
+        unmap #
+        unmap g*
+        unmap g#
+
+        set nohlsearch
+        set noincsearch
+
+        echo 'Better incsearch disabled'
+      endif
+    endfunction
+
+    call s:__enable_incsearch()
+    if !exists('g:__incsearch_enabled')
+      let g:__incsearch_enabled = 1
+    endif
+
+    nmap <silent> yo/ :call <SID>endisable_incsearch()<CR>
+
+  endif
+
+  " }}}
+
+  Plug 'aliva/vim-fish'
+
+  call plug#end()
 endif
-
-" }}}
-
-Plug 'aliva/vim-fish'
-
-call plug#end()
 
 function! s:init_esc_mappings()
   " it has to be done after any other esc/alt bindings

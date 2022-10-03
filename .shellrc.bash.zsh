@@ -37,9 +37,13 @@ export MARKPATH="$HOME/.marks"
 
 jump()
 {
-  [[ -z $1 ]] \
-    && ls -l "$MARKPATH" | tr -s ' ' | cut -d' ' -f9- | awk NF | awk -F ' -> ' '{printf "    %-10s -> %s\n", $1, $2}' \
-    || cd -P "$MARKPATH/$1" 2>/dev/null || echo "No such mark: $1"
+  if [ -z $1 ]; then
+    mkdir -p "$MARKPATH"; ls "$MARKPATH" | xargs -I'{}' sh -c 'printf "    %-10s -> %s\n" {} "$(readlink -f "$MARKPATH/{}")"'
+  else
+    if ! cd "$MARKPATH/$1"; then
+      echo "No such mark: $1"
+    fi
+  fi
 }
 
 mark()

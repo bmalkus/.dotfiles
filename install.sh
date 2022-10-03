@@ -47,7 +47,11 @@ fi
 
 cd
 
-_install "$TARGET_DIR/.gitconfig"
+[ -L ".gitconfig" ] && unlink ".gitconfig"
+if ! git config --global --get include.path "^${TARGET_DIR/./\\.}/\.gitconfig\$" >/dev/null; then
+  git config --global --add include.path "$TARGET_DIR/.gitconfig"
+fi
+
 
 _install "$TARGET_DIR/.zshrc"
 _install "$TARGET_DIR/.bashrc"

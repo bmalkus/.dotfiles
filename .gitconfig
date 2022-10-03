@@ -33,8 +33,5 @@
 [pull]
   rebase = true
 
-[include]
-  path = .gitconfig.local
-
 [core]
   excludesfile = ~/.cvsignore

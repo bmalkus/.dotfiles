@@ -1,4 +1,4 @@
-set -U DOTFILES_DIR "$HOME/.dotfiles"
+set -xU DOTFILES_DIR "$HOME/.dotfiles"
 
 if status --is-interactive && [ -z "$_DOTFILES_ONCE_" ]
   set -U _DOTFILES_ONCE_ 1
@@ -24,10 +24,10 @@ if [ -z "$_DOTFILES_ONCE_ON_START_" ]
 
   . "$DOTFILES_DIR/iterm2_shell_integration.fish"
 
-  . "$DOTFILES_DIR/.shellrc.config"
-
   [ -r "$HOME/.config/fish/once.local.fish" ] && . "$HOME/.config/fish/once.local.fish"
 end
+
+. "$DOTFILES_DIR/.shellrc.config"
 
 #######################################################################
 #                               prompt                                #
@@ -59,14 +59,6 @@ function _tide_item_prompt_pwd
       set split_pwd_for_output $_tide_reset_to_color_dirs $_tide_color_anchors$split_pwd[2]$_tide_reset_to_color_dirs $split_pwd[3..]
     end
     set split_pwd_for_output[-1] $_tide_color_anchors$split_pwd[-1]$_tide_reset_to_color_dirs
-
-    if not test -w $PWD
-      set -g tide_pwd_icon $tide_pwd_icon_unwritable' '
-    else if test $PWD = $HOME
-      set -g tide_pwd_icon $tide_pwd_icon_home' '
-    else
-      set -g tide_pwd_icon $tide_pwd_icon' '
-    end
 
     i=1 for dir_section in $split_pwd[2..-2]
       set -l parent_dir (string join -- / $split_pwd[..$i] | string replace '~' $HOME) # Uses i before increment
@@ -254,7 +246,7 @@ export MARKPATH=$HOME/.marks
 function jump
   if [ -z $argv[1] ]
     # ls -l "$MARKPATH" | tr -s ' ' | cut -d' ' -f9- | awk NF | awk -F ' -> ' '{printf "    %-10s -> %s\n", $1, $2}'
-    ls "$MARKPATH" | xargs -I'{}' sh -c 'printf "    %-10s -> %s\n" {} "$(readlink -f "$MARKPATH/{}")"'
+    mkdir -p "$MARKPATH"; ls "$MARKPATH" | xargs -I'{}' sh -c 'printf "    %-10s -> %s\n" {} "$(readlink -f "$MARKPATH/{}")"'
   else
     if ! cd "$MARKPATH/$argv[1]"
       echo "No such mark: $argv[1]"
@@ -375,6 +367,7 @@ abbr -a gloga       git log --oneline --decorate --color --graph --all
 abbr -a gpsup       git push --set-upstream origin "(git_current_branch)"
 abbr -a gpsup!      git push --set-upstream --force-with-lease origin "(git_current_branch)"
 
+abbr -a grf         git reflog
 abbr -a grm         git reset --mixed HEAD^
 
 abbr -a gstaa       git stash apply
