@@ -86,7 +86,7 @@ __prompt_pwd()
   IFS='/' read -ra split_pwd <<< "${PWD/$HOME/$tilde}"
   declare -a split_pwd_for_output
 
-  if [[ "${#split_pwd[@]}" -gt 1 ]]; then
+  if [[ "${#split_pwd[@]}" -gt 1 ]] || [[ "$PWD" == "/" ]]; then
     # Anchor first and last directories (which may be the same)
     if [[ -n "${split_pwd[0]}" ]]; then # ~/foo/bar, hightlight ~
       split_pwd_for_output=( "$_PWD_ANCHOR_COLOR${split_pwd[0]}$_PWD_REGULAR_COLOR" "${split_pwd[@]:1}" )
@@ -160,8 +160,9 @@ __get_prompt()
 
 prompt_command()
 {
-  if [ "${BASH_VERSINFO:-0}" -ge 4 ]; then
-    PS1="$(__get_prompt "\u" "\H" "\W" "$?")"
+  local last_status="$?"
+  if [ "${BASH_VERSINFO:-0}" -ge 4 ] && command -v readarray &>/dev/null; then
+    PS1="$(__get_prompt "\u" "\H" "\W" "$last_status")"
   else
     if [[ $PROMPT_COLOR == 0 ]]; then
       if [[ -n $SSH_CLIENT ]]; then
@@ -189,7 +190,7 @@ _completemarks() {
 complete -F _completemarks jump unmark j
 
 if [[ ! $PROMPT_COMMAND =~ "__dir_history" ]]; then
-  [[ -n $PROMPT_COMMAND ]] && PROMPT_COMMAND="$PROMPT_COMMAND;"
+  [[ -n $PROMPT_COMMAND && ! $PROMPT_COMMAND =~ \;$ ]] && PROMPT_COMMAND="$PROMPT_COMMAND;"
   PROMPT_COMMAND="$PROMPT_COMMAND prompt_command; __dir_history"
 fi
 
