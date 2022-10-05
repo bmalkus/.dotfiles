@@ -1,6 +1,7 @@
 export DOTFILES_DIR="$HOME/.dotfiles"
 
 . "$DOTFILES_DIR/.shellrc.bash.zsh"
+. "$DOTFILES_DIR/z.sh"
 
 if ls --color=auto >/dev/null 2>&1; then
   alias ls='ls --color=auto'

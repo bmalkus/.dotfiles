@@ -479,9 +479,52 @@ if has('eval')
             \ })
     endfunction
 
+    function! s:git_root_or_cwd()
+      return exists('b:git_dir') ? FugitiveFind(":/") : getcwd()
+    endfunction
+
+    function! s:ag_in(bang, ...)
+      let tokens  = a:000
+      let ag_opts = join(filter(copy(tokens), 'v:val =~ "^-"'))
+      let query   = (filter(copy(tokens), 'v:val !~ "^-"'))
+      let save_cwd = fnameescape(getcwd())
+      let cdCmd = (haslocaldir() ? 'lcd!' : 'cd!')
+      " in case provided path is relative:
+      " treat it as relative to dir of current file, not cwd
+      try
+        exec cdCmd . fnameescape(expand('%:p:h'))
+        let dir = s:full_path(a:1)
+      finally
+        exec cdCmd . save_cwd
+      endtry
+      call fzf#vim#ag(join(query[1:], ' '), ag_opts . ' --ignore .git/', {
+            \ 'dir': dir,
+            \ 'options': '--nth=4.. -d: --prompt "' . dir . ' (Ag)> "'
+            \ }, a:bang ? 1 : 0)
+    endfunction
+
+    function! s:ag_with_opts(bang, ...)
+      let tokens  = a:000
+      let ag_opts = join(filter(copy(tokens), 'v:val =~ "^-"'))
+      let query   = join(filter(copy(tokens), 'v:val !~ "^-"'))
+      let dir = s:git_root_or_cwd()
+      call fzf#vim#ag(query, ag_opts . ' --ignore .git/', {
+            \ 'dir': dir,
+            \ 'options': '--nth=4.. -d: --prompt "' . dir . ' (Ag)> "'
+            \ }, a:bang ? 1 : 0)
+    endfunction
+
     command! Mru call s:fzf_mru()
 
-    cnoreabbrev rg Rg
+    command! -nargs=+ -complete=dir -bang Agin call s:ag_in(<bang>0, <f-args>)
+    command! -nargs=* -bang Agcwd exec 'Agin<bang>'  getcwd() '<args>'
+    command! -nargs=* -bang AgGitRootOrCwd call s:ag_with_opts(<bang>0, <f-args>)
+
+    runtime after/plugin/overrideAg.vim
+
+    cnoreabbrev ag Ag
+    cnoreabbrev agin Agin
+    cnoreabbrev agcwd Agcwd
 
     let g:ctrlp_map = ''
 
