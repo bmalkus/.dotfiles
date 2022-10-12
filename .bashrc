@@ -9,6 +9,8 @@ fi
 
 set -o physical
 
+bind '"\ex": alias-expand-line'
+
 _NORMAL="\[\e[0m\]"
 _BOLD="\[\e[0;1;39m\]"
 
