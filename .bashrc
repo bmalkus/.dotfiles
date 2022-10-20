@@ -409,6 +409,7 @@ if [[ $- == *i* ]]; then
   alias gstp='git stash pop'
   alias gsts='git stash show --text'
   alias gsu='git submodule update'
+  alias gsur='git submodule update --recursive'
 
   alias gts='git tag -s'
   alias gtv='git tag | sort -V'
