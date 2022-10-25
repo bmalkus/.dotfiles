@@ -278,6 +278,11 @@ if [[ $- == *i* ]]; then
   alias gg='git gui citool'
   alias gga='git gui citool --amend'
 
+
+  git_current_branch() {
+    git rev-parse --abbrev-ref HEAD 2>/dev/null
+  }
+
   ggf() {
     [[ "$#" != 1 ]] && local b="$(git_current_branch)"
     git push --force origin "${b:=$1}"
