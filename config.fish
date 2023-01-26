@@ -336,6 +336,10 @@ end
 #                               abbrevs                               #
 #######################################################################
 
+# workaround - since fish 3.6 abbrevs must be initialized each time
+set -e __git_plugin_initialized
+__git.init
+
 abbr -a gapp        git apply
 
 abbr -a gbd         git branch -d
@@ -383,6 +387,12 @@ end
 function gwip -d "git commit a work-in-progress branch"
   git add -A; git rm (git ls-files --deleted) 2> /dev/null; git commit -m "--wip-- [ci skip]"
 end
+
+function last_history_item
+  echo $history[1]
+end
+
+abbr -a !! --position anywhere --function last_history_item
 
 abbr -a cd.         cd ..
 abbr -a cd..        cd ..
