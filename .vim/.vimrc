@@ -587,6 +587,15 @@ if has('eval')
 
   " }}}
 
+  " --------- git-related -------- {{{
+
+  Plug 'airblade/vim-gitgutter'
+
+  nmap [h <Plug>(GitGutterPrevHunk)
+  nmap ]h <Plug>(GitGutterNextHunk)
+
+  " }}}
+
   " --------- golden-ratio ------- {{{
 
   if !has('gui_macvim') && exists('*win_gettype')
@@ -869,7 +878,7 @@ if !exists("g:vimrc_init")
   set smarttab
 
   " line numbers
-  set nonumber
+  set number
   silent! set norelativenumber
 
   " set folding method
@@ -1079,3 +1088,30 @@ set formatoptions+=jl
 abbrev flase false
 
 nmap <silent>  :let @/=expand('<cword>') \| echo expand('<cword>')<CR>
+
+function! s:toggleWindow(name)
+  for i in range(1, winnr('$'))
+    let bnum = winbufnr(i)
+    if getbufvar(bnum, '&buftype') == 'quickfix'
+      let dict = getwininfo(win_getid(i))
+      if len(dict) > 0 && get(dict[0], 'quickfix', 0) && !get(dict[0], 'loclist', 0)
+        cclose
+      elseif len(dict) > 0 && get(dict[0], 'quickfix', 0) && get(dict[0], 'loclist', 0)
+        lclose
+      endif
+      return
+    endif
+  endfor
+
+  exec 'bot ' . a:name . 'open'
+endfunction
+
+" open/close quickfix/location-list window
+noremap <silent> \q :call <SID>toggleWindow('c')<CR>
+noremap <silent> \l :call <SID>toggleWindow('l')<CR>
+
+" resizing splits more easily
+nmap + :exe "vertical resize " . ((winwidth(0) + 1) * 3/2)<CR>
+nmap - :exe "vertical resize " . (winwidth(0) * 2/3)<CR>
+nmap + :exe "resize " . ((winheight(0) + 1) * 3/2)<CR>
+nmap - :exe "resize " . (winheight(0) * 2/3)<CR>
