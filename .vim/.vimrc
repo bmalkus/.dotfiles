@@ -598,7 +598,7 @@ if has('eval')
 
   " --------- golden-ratio ------- {{{
 
-  if !has('gui_macvim') && exists('*win_gettype')
+  if !has('gui_macvim')
 
     Plug 'roman/golden-ratio'
 
