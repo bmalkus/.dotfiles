@@ -61,8 +61,6 @@ _install "$TARGET_DIR/.tmux.conf"
 _install "$TARGET_DIR/.vim"
 _install "$TARGET_DIR/.vim/.vimrc"
 
-_install "$TARGET_DIR/.terminfo"
-
 if [[ $(uname -s) =~ Darwin ]]; then
   if cd $HOME/Library/Filters/ 2>/dev/null; then
     for f in $TARGET_DIR/filters/*; do
