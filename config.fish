@@ -314,7 +314,7 @@ function list_cd_hist
 end
 
 function __complete_cd_hist
-  for ind in (seq (count $_cd_history) 1)
+  for ind in (seq (count $_cd_history) -1 1)
     printf "%d\t%s\n" $ind $_cd_history[$ind]
   end
 end
