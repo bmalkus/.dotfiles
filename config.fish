@@ -307,14 +307,14 @@ function list_cd_hist
   if [ $full_size -gt 0 ]
     set -l to_print $_cd_history[(math -$argv[1])..-1]
     set -l size (count $to_print)
-    for ind in (seq -$size -1)
+    for ind in (seq -1 -1 -$size)
       printf "%4d %4d  %s\n" (math $full_size + $ind + 1) $ind $to_print[$ind]
     end
   end
 end
 
 function __complete_cd_hist
-  for ind in (seq (count $_cd_history) -1 1)
+  for ind in (seq -1 -1 -(count $_cd_history))
     printf "%d\t%s\n" $ind $_cd_history[$ind]
   end
 end
