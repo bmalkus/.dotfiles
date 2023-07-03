@@ -321,6 +321,9 @@ function list_cd_hist
 end
 
 function __complete_cd_hist
+  if test (count $_cd_history) -eq 0
+    return
+  end
   for ind in (seq -1 -1 -(count $_cd_history))
     printf "%d\t%s\n" $ind $_cd_history[$ind]
   end
