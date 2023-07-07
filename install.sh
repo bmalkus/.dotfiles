@@ -42,6 +42,8 @@ WITH_FZF=false
 readArgs "$@"
 
 if [ ! -d $TARGET_DIR/.git ]; then
+  mkdir "$TARGET_DIR"
+  chmod 700 "$TARGET_DIR"
   git clone --recursive https://github.com/bmalkus/.dotfiles "$TARGET_DIR"
 fi
 
