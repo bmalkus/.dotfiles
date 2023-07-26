@@ -22,7 +22,11 @@ if [ -z "$_DOTFILES_ONCE_ON_START_" ]
     complete -x -c gsutil -a '(gcloud_sdk_argcomplete)'
   end
 
-  . "$DOTFILES_DIR/iterm2_shell_integration.fish"
+  # iterm integration is not enabled properly in tmux for some reason, so this is a workaround
+  function enable_iterm_integration --on-event fish_prompt
+    . "$DOTFILES_DIR/iterm2_shell_integration.fish"
+    functions --erase enable_iterm_integration
+  end
 
   [ -r "$HOME/.config/fish/once.local.fish" ] && . "$HOME/.config/fish/once.local.fish"
 end
