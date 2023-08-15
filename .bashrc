@@ -19,6 +19,7 @@ if [[ $- == *i* ]]; then
   _NORMAL="\[\e[0m\]"
   _BOLD="\[\e[0;1;39m\]"
 
+  _CONDA_INFO_COLOR="\[\e[0;33m\]"
   _ENV_INFO_COLOR="\[\e[0;34m\]"
   _CONTEXT_COLOR="\[\e[0;38;2;215;175;135m\]"
   _RC_ERROR_COLOR="\[\e[0;38;2;215;0;0m\]"
@@ -46,6 +47,13 @@ if [[ $- == *i* ]]; then
 
   _CYAN="\[\e[0;36m\]"
   _LIGHT_CYAN="\[\e[0;1;36m\]"
+
+  __conda_env_info()
+  {
+    local ret=""
+    [[ -n $CONDA_DEFAULT_ENV ]] && ret="($CONDA_DEFAULT_ENV)"
+    [[ -n $ret ]] && echo "${ret}${1}"
+  }
 
   __virtual_env_info()
   {
@@ -135,6 +143,7 @@ if [[ $- == *i* ]]; then
   __get_prompt()
   {
     local virtual_env="${_ENV_INFO_COLOR}$(__virtual_env_info " ")"
+    local conda_env="${_CONDA_INFO_COLOR}$(__conda_env_info " ")"
     local git_branch="$(__git_info " ")"
 
     if [[ -n $SSH_CLIENT ]]; then
@@ -163,7 +172,7 @@ if [[ $- == *i* ]]; then
       prefix="$_YELLOW${PROMPT_PREFIX} "
     fi
 
-    echo "${prefix}${virtual_env}${user}${cwd}${git_branch}${last_exit_code}${prompt_char}"
+    echo "${prefix}${conda_env}${virtual_env}${user}${cwd}${git_branch}${last_exit_code}${prompt_char}"
   }
 
   prompt_command()
