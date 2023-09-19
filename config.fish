@@ -382,6 +382,9 @@ abbr -a gignore     git update-index --skip-worktree
 
 abbr -a gloga       git log --oneline --decorate --color --graph --all
 
+abbr -a gma         git merge --abort
+abbr -a gmc         git merge --continue
+
 abbr -a gpsup       git push --set-upstream origin "(git_current_branch)"
 abbr -a gpsup!      git push --set-upstream --force-with-lease origin "(git_current_branch)"
 
