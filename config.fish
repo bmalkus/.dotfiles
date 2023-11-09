@@ -392,6 +392,7 @@ abbr -a grf         git reflog
 abbr -a grm         git reset --mixed HEAD^
 
 abbr -a gstaa       git stash apply
+abbr -a gstap       git stash --patch
 abbr -a gstl        git stash list
 
 abbr -a guc         git reset --soft HEAD^
