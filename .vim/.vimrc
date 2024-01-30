@@ -154,9 +154,9 @@ if has('eval')
   " -------- easier motions ------ {{{
 
   Plug 'justinmk/vim-sneak'
-  Plug 'bkad/CamelCaseMotion'
+  " Plug 'bkad/CamelCaseMotion'
 
-  let g:camelcasemotion_key = 'g'
+  " let g:camelcasemotion_key = 'g'
 
   map <leader>s <Plug>Sneak_s
   map <leader>S <Plug>Sneak_S
