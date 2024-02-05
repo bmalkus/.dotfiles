@@ -33,6 +33,11 @@ end
 
 . "$DOTFILES_DIR/.shellrc.config"
 
+function bgFunc
+  fish -c (string join -- ' ' (string escape -- $argv)) &
+end
+complete -c bgFunc -a "(functions)"
+
 #######################################################################
 #                               prompt                                #
 #######################################################################
