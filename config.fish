@@ -55,6 +55,8 @@ set tide_anaconda_bg_color normal
 # set tide_pwd_color_anchors 00AFFF
 # set tide_pwd_color_dirs 0087AF
 
+set CONDA_LEFT_PROMPT 1
+
 function _tide_item_scl
   if test -n "$X_SCLS"
     set -l scl (string trim "$X_SCLS")
