@@ -42,13 +42,14 @@ complete -c bgFunc -a "(functions)"
 #                               prompt                                #
 #######################################################################
 
-set tide_left_prompt_items scl virtual_env context prompt_pwd git status cmd_duration character
+set tide_left_prompt_items scl virtual_env context pwd git status cmd_duration character
 [ $PROMPT_GIT_INFO = 0  ] && set -e tide_left_prompt_items[5]
 # set tide_right_prompt_items time
 set tide_right_prompt_items
 set tide_virtual_env_icon
 set tide_git_color_upstream $tide_pwd_color_anchors
 set tide_prompt_add_newline_before false
+set tide_character_icon '>'
 
 set tide_anaconda_color FFAB76
 set tide_anaconda_bg_color normal
