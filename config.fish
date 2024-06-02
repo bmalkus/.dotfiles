@@ -50,6 +50,7 @@ set tide_virtual_env_icon
 set tide_git_color_upstream $tide_pwd_color_anchors
 set tide_prompt_add_newline_before false
 set tide_character_icon '>'
+set tide_pwd_icon_unwritable ⛔
 
 set tide_anaconda_color FFAB76
 set tide_anaconda_bg_color normal
