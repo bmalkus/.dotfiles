@@ -394,8 +394,8 @@ abbr -a gloga       git log --oneline --decorate --color --graph --all
 abbr -a gma         git merge --abort
 abbr -a gmc         git merge --continue
 
-abbr -a gpsup       git push --set-upstream origin "(git_current_branch)"
-abbr -a gpsup!      git push --set-upstream --force-with-lease origin "(git_current_branch)"
+abbr -a gpsup       git push --set-upstream origin "(__git.current_branch)"
+abbr -a gpsup!      git push --set-upstream --force-with-lease origin "(__git.current_branch)"
 
 abbr -a grf         git reflog
 abbr -a grm         git reset --mixed HEAD^
@@ -406,10 +406,6 @@ abbr -a gstl        git stash list
 
 abbr -a guc         git reset --soft HEAD^
 abbr -a gunignore   git update-index --no-skip-worktree
-
-function git_current_branch
-  git rev-parse --abbrev-ref HEAD 2>/dev/null
-end
 
 function gwip -d "git commit a work-in-progress branch"
   git add -A; git rm (git ls-files --deleted) 2> /dev/null; git commit -m "--wip-- [ci skip]"
