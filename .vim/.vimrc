@@ -875,7 +875,7 @@ if !exists("g:vimrc_init")
 
   " line numbers
   set number
-  silent! set norelativenumber
+  silent! set relativenumber
 
   " set folding method
   set foldmethod=marker
