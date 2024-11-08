@@ -153,18 +153,6 @@ if has('eval')
 
   " -------- easier motions ------ {{{
 
-  Plug 'justinmk/vim-sneak'
-  " Plug 'bkad/CamelCaseMotion'
-
-  " let g:camelcasemotion_key = 'g'
-
-  map <leader>s <Plug>Sneak_s
-  map <leader>S <Plug>Sneak_S
-  map f <Plug>Sneak_f
-  map F <Plug>Sneak_F
-  map t <Plug>Sneak_t
-  map T <Plug>Sneak_T
-
   if v:version >= 703
     Plug 'easymotion/vim-easymotion'
 
@@ -182,24 +170,6 @@ if has('eval')
   " ------------ python ---------- {{{
 
   Plug 'hynek/vim-python-pep8-indent'
-
-  " }}}
-
-  " ---------- ultisnips --------- {{{
-
-  if v:version >= 800 && ( has('python3') || has('python') )
-
-    Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-
-    let g:UltiSnipsExpandTrigger = 'e'
-    let g:UltiSnipsListSnippets = 's'
-    let g:UltiSnipsJumpForwardTrigger = 'f'
-    let g:UltiSnipsJumpBackwardTrigger = 'b'
-
-    let g:UltiSnipsEditSplit = 'vertical'
-    let g:UltiSnipsSnippetsDir = $DOTFILES_DIR . '/.vim/UltiSnips'
-
-  endif
 
   " }}}
 
@@ -1084,27 +1054,6 @@ set formatoptions+=jl
 abbrev flase false
 
 nmap <silent>  :let @/=expand('<cword>') \| echo expand('<cword>')<CR>
-
-function! s:toggleWindow(name)
-  for i in range(1, winnr('$'))
-    let bnum = winbufnr(i)
-    if getbufvar(bnum, '&buftype') == 'quickfix'
-      let dict = getwininfo(win_getid(i))
-      if len(dict) > 0 && get(dict[0], 'quickfix', 0) && !get(dict[0], 'loclist', 0)
-        cclose
-      elseif len(dict) > 0 && get(dict[0], 'quickfix', 0) && get(dict[0], 'loclist', 0)
-        lclose
-      endif
-      return
-    endif
-  endfor
-
-  exec 'bot ' . a:name . 'open'
-endfunction
-
-" open/close quickfix/location-list window
-noremap <silent> \q :call <SID>toggleWindow('c')<CR>
-noremap <silent> \l :call <SID>toggleWindow('l')<CR>
 
 " resizing splits more easily
 nmap + :exe "vertical resize " . ((winwidth(0) + 1) * 3/2)<CR>
