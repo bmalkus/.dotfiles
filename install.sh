@@ -5,21 +5,6 @@ if ! command -v git >/dev/null 2>&1; then
   exit 1
 fi
 
-readArgs() {
-  while [[ $# -gt 0 ]]; do
-    case "$1" in
-    -with-fzf)
-      WITH_FZF=true
-      ;;
-    *)
-      echo "Unknown argument: $1"
-      exit 1
-      ;;
-    esac
-    shift
-  done
-}
-
 _install()
 {
   target=$(basename "$1")
@@ -37,9 +22,6 @@ _install_cp()
 }
 
 TARGET_DIR="$HOME/.dotfiles"
-WITH_FZF=false
-
-readArgs "$@"
 
 if [ ! -d $TARGET_DIR/.git ]; then
   mkdir "$TARGET_DIR"
@@ -79,11 +61,9 @@ cd $HOME/.config/fish/
 _install "$TARGET_DIR/config.fish"
 _install "$TARGET_DIR/fish_plugins"
 
-if [[ $WITH_FZF = true ]] && [[ ! -d "$TARGET_DIR/.fzf/.git" ]]; then
-  echo "Downloading and installing FZF"
-  git clone --depth 1 https://github.com/junegunn/fzf.git "$TARGET_DIR/.fzf"
-  "$TARGET_DIR/.fzf/install" --key-bindings --completion --no-update-rc
-fi
+cd $HOME/.config
+
+_install "$TARGET_DIR/nvim"
 
 if [ ! -f "$TARGET_DIR/.vim/vim-plug/autoload/plug.vim" ]; then
   echo "Downloading plug.vim"

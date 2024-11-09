@@ -7,7 +7,7 @@ set -e
 EDIT=0
 COMPRESS=-z
 OUTPUT=vim.portable
-ALWAYS_GREPV="grep -v '\.gitignore\|\.netrwhist\|.undodir\|.swapdir\|.backupdir\|plugged/fzf'"
+ALWAYS_GREPV="grep -v '\.gitignore\|\.netrwhist\|.undodir\|.swapdir\|.backupdir'"
 GREPV="cat"
 VIMRC=.vimrc
 DEFAULT_BASE='/tmp/myvim-$(whoami)'

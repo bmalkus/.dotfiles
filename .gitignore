@@ -3,3 +3,5 @@ dotfiles_backup*/
 .antigen/
 .zgen/
 shellrc.config
+
+.DS_Store

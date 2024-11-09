@@ -88,12 +88,6 @@ alias sr=". $HOME/.config/fish/config.fish"
 
 bind -k nul forward-char
 
-export FZF_DEFAULT_COMMAND='ag $dir -g "" -U --hidden --ignore ".git/" 2>/dev/null'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-if type -q fd
-  export FZF_ALT_C_COMMAND='fd $dir --type d --hidden --exclude ".git" 2>/dev/null'
-end
-
 #######################################################################
 #                                marks                                #
 #######################################################################
