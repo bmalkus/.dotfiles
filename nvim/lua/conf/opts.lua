@@ -17,6 +17,7 @@ vim.opt.undofile = true
 vim.opt.undolevels = 5000
 
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
+vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
 vim.opt.updatetime = 250
