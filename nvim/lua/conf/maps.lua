@@ -27,6 +27,10 @@ vim.keymap.set({'n', 'v'}, '0P', '"0P', { desc = 'Paste from yank buffer' })
 
 vim.keymap.set({'i'}, 'jj', '<esc>', { desc = 'Exit from insert mode' })
 
+vim.keymap.set({'i'}, '<C-l>', '<Right>', { desc = 'Move forward one character', silent = true, noremap = false })
+vim.keymap.set({'i'}, '<A-f>', '<C-o>e<C-o>l', { desc = 'Move one word forward', silent = true })
+vim.keymap.set({'i'}, '<A-b>', '<C-o>b', { desc = 'Move one word backwards', silent = true })
+
 -- tabs/splits management
 vim.keymap.set('n', '<A-x>', ':sp<CR>', { desc = 'Split horizontally', noremap = true, nowait = true })
 vim.keymap.set('n', '<A-v>', ':vsp<CR>', { desc = 'Split vertically', noremap = true, nowait = true })

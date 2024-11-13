@@ -217,7 +217,6 @@ return {
           ['<CR>'] = cmp.mapping.confirm({ select = false }),
           ['<Tab>'] = cmp.mapping.confirm({ select = true }),
           ['<C-Space>'] = cmp.mapping.complete(),
-          ['<C-e>'] = cmp.mapping.abort(),
         }),
         sources = cmp.config.sources({
           { name = 'nvim_lsp' },
@@ -226,6 +225,14 @@ return {
           { name = 'buffer' },
         })
       })
+
+      vim.keymap.set({'i'}, '<C-e>', function()
+        if cmp.visible() then
+          cmp.abort()
+        else
+          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-o>$', true, false, true), 'n', true)
+        end
+      end, { desc = 'Cancel completion or move to the end of line', silent = true })
     end
   },
 -- }}}
@@ -435,6 +442,8 @@ return {
   { 'tpope/vim-repeat', config = function() end },
   -- SudoWrite, etc.
   { 'tpope/vim-eunuch', config = function() end },
+  -- change options with yo*, etc
+  { 'tpope/vim-unimpaired', config = function() end },
 -- }}}
 -- {{{ telescope
   {
