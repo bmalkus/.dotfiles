@@ -443,7 +443,20 @@ return {
   -- SudoWrite, etc.
   { 'tpope/vim-eunuch', config = function() end },
   -- change options with yo*, etc
-  { 'tpope/vim-unimpaired', config = function() end },
+  { 'tpope/vim-unimpaired', config = function()
+    -- toggle all columns on the left to allow manual mulitline copy
+    vim.keymap.set('n', 'yom', function()
+      if vim.opt_local.number:get() then
+        vim.opt_local.signcolumn = 'no'
+        vim.opt_local.number = false
+        vim.opt_local.relativenumber = false
+      else
+        vim.opt_local.signcolumn = 'yes'
+        vim.opt_local.number = true
+        vim.opt_local.relativenumber = true
+      end
+    end, { desc = "Toggle signcolumn" })
+  end },
 -- }}}
 -- {{{ telescope
   {

@@ -24,6 +24,9 @@ vim.opt.updatetime = 250
 
 vim.opt.timeoutlen = 500 -- 0
 
+-- keep signcolumn - so it does not jump when errors appear and disappear (or when switching modes)
+vim.opt.signcolumn = 'yes'
+
 -- Configure how new splits should be opened
 vim.opt.splitright = true
 vim.opt.splitbelow = true
