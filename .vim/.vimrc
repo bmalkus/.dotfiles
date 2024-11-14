@@ -725,7 +725,7 @@ set clipboard-=autoselect
 " set clipboard+=unnamed
 
 " timeout for key codes (delayed ESC is annoying)
-set ttimeoutlen=0
+set ttimeoutlen=50
 
 " enable persistent undo + its settings
 if has("persistent_undo")
