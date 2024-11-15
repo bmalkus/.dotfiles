@@ -101,6 +101,14 @@ return {
     'stevearc/dressing.nvim',
     opts = {},
   },
+  {
+    'akinsho/toggleterm.nvim',
+    version = "*",
+    opts = {
+      open_mapping = [[<c-\>]],
+      direction = 'float',
+    },
+  },
   -- }}}
   -- {{{ nvim-tree, undotree
   -- mostly for auto cwd
@@ -153,7 +161,17 @@ return {
     'neovim/nvim-lspconfig',
     opts = {},
     config = function()
-      vim.keymap.set('n', '<A-CR>', vim.lsp.buf.code_action, { desc = 'Code action' })
+      vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(args)
+          vim.keymap.set('n', '<A-CR>', vim.lsp.buf.code_action, { desc = 'Code action' })
+          vim.keymap.set('n', '<leader>lq', vim.diagnostic.setloclist, { desc = 'Add diagnostics to Quickfix list and open' })
+          vim.keymap.set('n', '<leader>lr', function()
+            vim.lsp.buf.rename()
+            -- save all buffers after rename
+            vim.cmd('silent! wa')
+          end, { desc = 'Rename current symbol', })
+        end,
+      })
 
       require('lspconfig').lua_ls.setup {
         on_init = function(client)
@@ -397,9 +415,9 @@ return {
       treesj.setup({
         use_default_keymaps = false,
       })
-      vim.keymap.set('n', '<leader><leader>m', treesj.toggle)
-      vim.keymap.set('n', '<leader><leader>s', treesj.split)
-      vim.keymap.set('n', '<leader><leader>j', treesj.join)
+      vim.keymap.set('n', '<leader><leader>m', treesj.toggle, { desc = 'Toggle (split/join) block of code' })
+      vim.keymap.set('n', '<leader><leader>s', treesj.split, { desc = 'Split block of code' })
+      vim.keymap.set('n', '<leader><leader>j', treesj.join, { desc = 'Join block of code' })
     end
   },
   {
@@ -483,14 +501,14 @@ return {
         }
       })
       local builtin = require('telescope.builtin')
-      vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
-      vim.keymap.set('n', '<leader>fg', builtin.git_files, { desc = 'Telescope find git files' })
+      vim.keymap.set('n', '<leader>f', builtin.git_files, { desc = 'Telescope find git files' })
+      vim.keymap.set('n', '<leader>F', builtin.find_files, { desc = 'Telescope find all files' })
       vim.keymap.set('n', '<leader>g', builtin.live_grep, { desc = 'Telescope live grep' })
+      vim.keymap.set('n', '<leader>G', builtin.grep_string, { desc = 'Telescope live grep string under cursor' })
       vim.keymap.set('n', '<leader>b', builtin.buffers, { desc = 'Telescope buffers' })
       vim.keymap.set('n', '<leader>c', builtin.commands, { desc = 'Telescope commands' })
-      vim.keymap.set('n', '<leader>fs', builtin.lsp_workspace_symbols, { desc = 'Telescope workspace symbols' })
       vim.keymap.set('n', '<leader>t', builtin.builtin, { desc = 'Telescope itself' })
-      vim.keymap.set('n', '<leader>fp', require'telescope'.extensions.projects.projects, { desc = 'Telescope projects' })
+      vim.keymap.set('n', '<leader>P', require'telescope'.extensions.projects.projects, { desc = 'Telescope projects' })
       vim.keymap.set('n', '<C-p>', builtin.oldfiles, { desc = 'Telescope previous files' })
     end
   },
