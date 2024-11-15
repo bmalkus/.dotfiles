@@ -57,7 +57,7 @@ return {
           timer:again()
         end,
       })
-      vim.api.nvim_create_autocmd({'BufWritePost', 'BufEnter'}, {
+      vim.api.nvim_create_autocmd({'BufWritePost', 'BufEnter', 'DirChanged'}, {
         desc = 'Refresh lualine on various events',
         group = my_au_grp,
         callback = function()
