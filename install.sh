@@ -45,16 +45,6 @@ _install "$TARGET_DIR/.tmux.conf"
 _install "$TARGET_DIR/.vim"
 _install "$TARGET_DIR/.vim/.vimrc"
 
-if [[ $(uname -s) =~ Darwin ]]; then
-  if cd $HOME/Library/Filters/ 2>/dev/null; then
-    for f in $TARGET_DIR/filters/*; do
-      _install_cp "$f"
-    done
-  else
-    echo "No $HOME/Library/Filters/ directory, not installing filters"
-  fi
-fi
-
 mkdir -p $HOME/.config/fish/
 cd $HOME/.config/fish/
 
