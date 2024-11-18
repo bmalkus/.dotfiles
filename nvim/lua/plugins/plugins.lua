@@ -447,7 +447,9 @@ return {
       vim.keymap.set('', 'T', function() hop.hint_char1({ direction = directions.BEFORE_CURSOR, hint_offset = 1, current_line_only = true }) end, { desc = "Hop backwards till letter", remap=true })
       vim.keymap.set('', '<leader>s', function() hop.hint_char2() end, { desc = "Hop to 2-char sequence", remap=true })
       vim.keymap.set('', '<leader><leader>w', function() hop.hint_words({ direction = directions.AFTER_CURSOR }) end, { desc = "Hop to word", remap=true })
+      vim.keymap.set('', '<leader><leader>W', function() hop.hint_patterns({ direction = directions.AFTER_CURSOR }, '\\S\\+') end, { desc = "Hop to Word", remap=true })
       vim.keymap.set('', '<leader><leader>b', function() hop.hint_words({ direction = directions.BEFORE_CURSOR }) end, { desc = "Hop backwards to word", remap=true })
+      vim.keymap.set('', '<leader><leader>B', function() hop.hint_patterns({ direction = directions.BEFORE_CURSOR }, '\\S\\+') end, { desc = "Hop backwards to Word", remap=true })
       vim.keymap.set('', '<leader><leader>j', function() hop.hint_lines_skip_whitespace({ direction = directions.AFTER_CURSOR }) end, { desc = "Hop to line", remap=true })
       vim.keymap.set('', '<leader><leader>k', function() hop.hint_lines_skip_whitespace({ direction = directions.BEFORE_CURSOR }) end, { desc = "Hop backwards to line", remap=true })
     end
