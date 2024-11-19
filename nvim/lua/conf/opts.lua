@@ -56,3 +56,7 @@ vim.opt.shiftwidth = 2
 vim.opt.softtabstop = 2
 vim.opt.tabstop = 2
 vim.opt.smartindent = true
+
+-- Plugin-specific opts
+-- must be set before lazy initializes the plugin
+vim.g.sandwich_no_default_key_mappings = 1

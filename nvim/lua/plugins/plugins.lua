@@ -424,11 +424,6 @@ return {
     'machakann/vim-sandwich',
     config = function()
       vim.api.nvim_command("runtime macros/sandwich/keymap/surround.vim")
-      -- remove unneeded mappings which cause 's' command delay
-      for _, mapping in ipairs({ 'sa', 'sr', 'srb', 'sd', 'sdb' }) do
-        pcall(vim.keymap.del, 'n', mapping)
-        pcall(vim.keymap.del, 'v', mapping)
-      end
     end
   },
   -- }}}
@@ -439,7 +434,10 @@ return {
       local hop = require('hop')
       local directions = require('hop.hint').HintDirection
 
-      hop.setup({ keys = 'etovxqpdygfblzhckisuran' })
+      hop.setup({
+        keys = 'etovxqpdygfblzhckisuran',
+        -- distance_method = require('hop.hint').readwise_distance,
+      })
 
       vim.keymap.set('', 'f', function() hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true }) end, { desc = "Hop to letter", remap=true })
       vim.keymap.set('', 'F', function() hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true }) end, { desc = "Hop backwards to letter", remap=true })
