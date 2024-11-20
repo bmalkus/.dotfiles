@@ -430,6 +430,7 @@ return {
 -- {{{ easymotions
   {
     'smoka7/hop.nvim',
+    version = 'v2.7.0',
     config = function ()
       local hop = require('hop')
       local directions = require('hop.hint').HintDirection

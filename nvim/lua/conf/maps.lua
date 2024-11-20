@@ -27,9 +27,12 @@ vim.keymap.set({'n', 'v'}, '0P', '"0P', { desc = 'Paste from yank buffer' })
 
 vim.keymap.set({'i'}, 'jj', '<esc>', { desc = 'Exit from insert mode' })
 
-vim.keymap.set({'i'}, '<C-l>', '<Right>', { desc = 'Move forward one character', silent = true, noremap = false })
-vim.keymap.set({'i'}, '<A-f>', '<C-o>e<C-o>l', { desc = 'Move one word forward', silent = true })
-vim.keymap.set({'i'}, '<A-b>', '<C-o>b', { desc = 'Move one word backwards', silent = true })
+vim.keymap.set({'i'}, '<C-a>', '<C-o>^', { desc = 'Move to the beggining of the line', noremap = false })
+vim.keymap.set({'c'}, '<C-a>', '<Home>', { desc = 'Move to the beggining of the line', noremap = false })
+vim.keymap.set({'c'}, '<C-e>', '<End>', { desc = 'Move to the end of the line', noremap = false })
+vim.keymap.set({'i', 'c'}, '<C-l>', '<Right>', { desc = 'Move forward one character', noremap = false })
+vim.keymap.set({'i', 'c'}, '<A-f>', '<S-Right>', { desc = 'Move one word forward' })
+vim.keymap.set({'i', 'c'}, '<A-b>', '<S-Left>', { desc = 'Move one word backwards' })
 
 -- tabs/splits management
 vim.keymap.set('n', '<A-x>', ':sp<CR>', { desc = 'Split horizontally', noremap = true, nowait = true })
