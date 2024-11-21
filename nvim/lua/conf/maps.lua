@@ -1,14 +1,14 @@
 -- More info:
 -- :help nvim_set_keymap
 
-vim.keymap.set('n', 'gq', vim.diagnostic.setloclist, { desc = 'Open diagnostic Quickfix list'  })
+vim.keymap.set('n', '<leader><leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic Quickfix list'  })
 
 vim.keymap.set('', 'j', 'gj', { desc = 'Move down in wrapped lines more naturally', noremap = true })
 vim.keymap.set('', 'k', 'gk', { desc = 'Move up in wrapped lines more naturally', noremap = true })
 
 vim.keymap.set('', '<A-O>', ':set paste<CR>O<Esc>:set nopaste<CR>', { desc = 'Insert empty line above', noremap = true })
 
-vim.keymap.set('', '<leader>q', ':q<CR>', { desc = 'Easier quitting', silent = true })
+vim.keymap.set('', '<leader>q', ':q<CR>', { desc = 'Quit', silent = true })
 vim.keymap.set('', '<leader>w', ':w<CR>', { desc = 'Save current buffer', silent = true })
 
 vim.keymap.set('', '<leader>n', ':noh<CR>', { desc = 'Disable search highlight', silent = true })

@@ -115,8 +115,7 @@ return {
   {
     "nvim-tree/nvim-tree.lua",
     version = "*",
-    lazy = false,
-    dependencies = {},
+    event = 'VeryLazy',
     config = function()
       require("nvim-tree").setup {
         on_attach = function(bufnr)
@@ -430,9 +429,8 @@ return {
   },
   {
     'Wansmer/treesj',
-    keys = { '<leader><leader>m', '<leader><leader>j', '<leader><leader>s' },
-    opts = {
-    },
+    event = "VeryLazy",
+    opts = {},
     config = function()
       local treesj = require('treesj')
       treesj.setup({
@@ -502,7 +500,8 @@ return {
 -- }}}
 -- {{{ telescope
   {
-    'nvim-telescope/telescope.nvim', tag = '0.1.8',
+    'nvim-telescope/telescope.nvim',
+    tag = '0.1.8',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope-ui-select.nvim'

@@ -22,7 +22,7 @@ vim.opt.smartcase = true
 
 vim.opt.updatetime = 250
 
-vim.opt.timeoutlen = 500 -- 0
+vim.opt.timeoutlen = 750
 
 -- keep signcolumn - so it does not jump when errors appear and disappear (or when switching modes)
 vim.opt.signcolumn = 'yes'
