@@ -202,8 +202,9 @@ return {
         end
       }
 
-      vim.keymap.set('n', '<C-n>', ":NvimTreeToggle<CR>", { desc = "nvim-tree: Open", noremap = true, silent = true, nowait = true })
-      vim.keymap.set('n', '<A-n>', ":NvimTreeFindFileToggle<CR>", { desc = "nvim-tree: Open and find file", noremap = true, silent = true, nowait = true })
+      local api = require("nvim-tree.api")
+      vim.keymap.set('n', '<C-n>', api.tree.toggle, { desc = "nvim-tree: Open", noremap = true, silent = true, nowait = true })
+      vim.keymap.set('n', '<A-n>', function() api.tree.toggle({ find_file = true, update_root = true }) end, { desc = "nvim-tree: Open and find file", noremap = true, silent = true, nowait = true })
     end,
   },
   {
@@ -569,6 +570,13 @@ return {
     },
     config = function ()
       require("telescope").setup({
+        pickers = {
+          find_files = {
+            hidden = true,
+            no_ignore = true,
+            file_ignore_patterns = { ".git/" }
+          }
+        },
         defaults = {
           vimgrep_arguments = {
             -- all required except `--smart-case`
