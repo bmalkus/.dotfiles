@@ -30,6 +30,12 @@ return {
           }
         },
         sections = {
+          lualine_c = {
+            {
+              'filename',
+              path = 4,
+            }
+          },
           lualine_x = {
             {
               require("noice").api.statusline.mode.get,
