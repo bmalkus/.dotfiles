@@ -28,16 +28,26 @@ return {
             tabline = 999999999,
             winbar = 999999999,
           }
-        }
+        },
+        sections = {
+          lualine_x = {
+            {
+              require("noice").api.statusline.mode.get,
+              cond = require("noice").api.statusline.mode.has,
+              color = { fg = "#ff9e64" },
+            },
+            'encoding',
+            'fileformat',
+            'filetype',
+          },
+        },
       }
       -- custom refreshing of lualine, heavy artillery, but avoids
       -- interference of lualine with NvimTree window picker
       local refresh_int_ms = 1000
       local timer = vim.uv.new_timer()
       timer:start(refresh_int_ms, refresh_int_ms, function()
-        vim.schedule(function()
-          lualine.refresh()
-        end)
+        vim.schedule(lualine.refresh)
       end)
 
       local my_au_grp = vim.api.nvim_create_augroup('my-lualine-autocmds', { clear = true })
@@ -57,11 +67,31 @@ return {
           timer:again()
         end,
       })
-      vim.api.nvim_create_autocmd({'BufWritePost', 'BufEnter', 'DirChanged'}, {
+      vim.api.nvim_create_autocmd({
+        'BufWritePost',
+        'BufEnter',
+        'DirChanged',
+        'ModeChanged',
+        'RecordingEnter',
+      }, {
         desc = 'Refresh lualine on various events',
         group = my_au_grp,
         callback = function()
           lualine.refresh()
+        end,
+      })
+      -- special case for RecordingLeave
+      -- it happens right before recording ends, so refresh do not work correctly
+      vim.api.nvim_create_autocmd({
+        'RecordingLeave',
+      }, {
+        desc = 'Refresh lualine on various events',
+        group = my_au_grp,
+        callback = function()
+          local timer = vim.uv.new_timer()
+          timer:start(00, 0, function()
+            vim.schedule(lualine.refresh)
+          end)
         end,
       })
     end
@@ -83,7 +113,38 @@ return {
   {
     "folke/noice.nvim",
     event = "VeryLazy",
-    opts = {},
+    opts = {
+      views = {
+        cmdline_popup = {
+          position = {
+            row = 5,
+            col = "50%",
+          },
+          size = {
+            width = 60,
+            height = "auto",
+          },
+        },
+        popupmenu = {
+          relative = "editor",
+          position = {
+            row = 8,
+            col = "50%",
+          },
+          size = {
+            width = 60,
+            height = 10,
+          },
+          border = {
+            style = "rounded",
+            padding = { 0, 1 },
+          },
+          win_options = {
+            winhighlight = { Normal = "Normal", FloatBorder = "DiagnosticInfo" },
+          },
+        },
+      },
+    },
     dependencies = {
       "MunifTanjim/nui.nvim",
       "rcarriga/nvim-notify",
@@ -94,7 +155,7 @@ return {
     event = "VeryLazy",
     opts = {
       top_down = false,
-      render = "wrapped-compact",
+      -- render = "wrapped-compact",
     }
   },
   {
