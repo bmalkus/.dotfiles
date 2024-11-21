@@ -298,7 +298,7 @@ return {
           -- ['<Tab>'] = cmp.mapping.confirm({ select = true }),
           ['<C-Space>'] = cmp.mapping.complete(),
           ['<C-e>'] = cmp.mapping.abort(),
-          ['<Esc>'] = cmp.mapping.abort(),
+          -- ['<Esc>'] = cmp.mapping.abort(),
         }),
         sources = cmp.config.sources({
           { name = 'nvim_lsp' },
