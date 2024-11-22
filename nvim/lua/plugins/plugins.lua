@@ -180,6 +180,35 @@ return {
       direction = 'float',
     },
   },
+  {
+    'lewis6991/gitsigns.nvim',
+    opts = {
+      on_attach = function(bufnr)
+        local gitsigns = require('gitsigns')
+
+        vim.keymap.set('n', ']c', function()
+          if vim.wo.diff then
+            vim.cmd.normal({']c', bang = true})
+          else
+            gitsigns.nav_hunk('next')
+          end
+        end, { buffer = bufnr, desc = 'Next git hunk' })
+
+        vim.keymap.set('n', '[c', function()
+          if vim.wo.diff then
+            vim.cmd.normal({'[c', bang = true})
+          else
+            gitsigns.nav_hunk('prev')
+          end
+        end, { buffer = bufnr, desc = 'Previous git hunk' })
+
+        vim.keymap.set('n', '<leader>hp', gitsigns.preview_hunk, { buffer = bufnr, desc = 'Preview hunk' })
+        vim.keymap.set('n', '<leader>hb', function() gitsigns.blame_line{full=true} end, { buffer = bufnr, desc = 'Blame line' })
+        vim.keymap.set('n', '<leader>hd', gitsigns.diffthis, { buffer = bufnr, desc = 'Diff changes' })
+        vim.keymap.set('n', '<leader>hD', function() gitsigns.diffthis('~') end, { buffer = bufnr, desc = 'Diff with previous commit' })
+      end
+    },
+  },
   -- }}}
   -- {{{ nvim-tree, undotree
   -- mostly for auto cwd
@@ -356,7 +385,7 @@ return {
       local configs = require("nvim-treesitter.configs")
 
       configs.setup({
-        ensure_installed = { "lua", "vim", "vimdoc", "python", "yaml", "fish", "markdown" },
+        ensure_installed = { "lua", "vim", "vimdoc", "python", "yaml", "fish", "markdown", "json" },
         sync_install = false,
         highlight = {
           enable = true,
@@ -609,7 +638,8 @@ return {
       vim.keymap.set('n', '<leader>G', builtin.grep_string, { desc = 'Telescope live grep string under cursor' })
       vim.keymap.set('n', '<leader>b', builtin.buffers, { desc = 'Telescope buffers' })
       vim.keymap.set('n', '<leader>c', builtin.commands, { desc = 'Telescope commands' })
-      vim.keymap.set('n', '<leader>t', builtin.builtin, { desc = 'Telescope itself' })
+      vim.keymap.set('n', '<leader>t', builtin.builtin, { desc = 'Telescope builtins' })
+      vim.keymap.set('n', '<leader>m', builtin.marks, { desc = 'Telescope marks' })
       vim.keymap.set('n', '<leader>P', require'telescope'.extensions.projects.projects, { desc = 'Telescope projects' })
       vim.keymap.set('n', '<C-p>', builtin.oldfiles, { desc = 'Telescope previous files' })
     end
