@@ -10,7 +10,7 @@ vim.opt.mouse = 'a'
 -- don't show mode, it's in the statusline
 vim.opt.showmode = false
 
--- Enable break indent (indent broken lines with the same indent
+-- Enable break indent (indent broken lines with the same indent)
 vim.opt.breakindent = true
 
 vim.opt.undofile = true
@@ -44,7 +44,6 @@ vim.opt.cursorline = true
 -- show at least 5 lines below/above cursor
 vim.opt.scrolloff = 5
 vim.opt.sidescrolloff = 5
-vim.opt.sidescroll = 1
 
 vim.opt.completeopt = 'menu,menuone,preview'
 

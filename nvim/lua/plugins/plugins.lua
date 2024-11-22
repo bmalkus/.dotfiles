@@ -596,7 +596,7 @@ return {
         vim.opt_local.number = true
         vim.opt_local.relativenumber = true
       end
-    end, { desc = "Toggle signcolumn" })
+    end, { desc = "Toggle sign and number columns" })
   end },
 -- }}}
 -- {{{ telescope

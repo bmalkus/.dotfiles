@@ -1,12 +1,8 @@
 -- More info:
 -- :help nvim_set_keymap
 
-vim.keymap.set('n', '<leader><leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic Quickfix list'  })
-
 vim.keymap.set('', 'j', 'gj', { desc = 'Move down in wrapped lines more naturally', noremap = true })
 vim.keymap.set('', 'k', 'gk', { desc = 'Move up in wrapped lines more naturally', noremap = true })
-
-vim.keymap.set('', '<A-O>', ':set paste<CR>O<Esc>:set nopaste<CR>', { desc = 'Insert empty line above', noremap = true })
 
 vim.keymap.set('', '<leader>q', ':q<CR>', { desc = 'Quit', silent = true })
 vim.keymap.set('', '<leader>w', ':w<CR>', { desc = 'Save current buffer', silent = true })
@@ -14,8 +10,6 @@ vim.keymap.set('', '<leader>w', ':w<CR>', { desc = 'Save current buffer', silent
 vim.keymap.set('', '<leader>n', ':noh<CR>', { desc = 'Disable search highlight', silent = true })
 
 vim.keymap.set('n', '<leader><tab>', ':b#<CR>', { desc = 'Switch to last buffer', silent = true })
-
-vim.keymap.set('n', '<leader>v', function() require("nvim-tree.api").tree.open({ path = os.getenv("HOME") .. "/.config/nvim" }) end, { desc = 'Go to config dir' })
 
 vim.keymap.set({'n', 'v'}, 'cy', '"+y', { desc = 'Copy to clipboard' })
 vim.keymap.set({'n', 'v'}, 'cY', '"+Y', { desc = 'Copy line(s) to clipboard' })
@@ -55,15 +49,9 @@ vim.keymap.set('n', '<A-l>', 'gt', { desc = 'Move focus to the previous tab', no
 vim.keymap.set('n', '<A-H>', ':tabm-1<CR>', { desc = 'Move tab right', noremap = true, silent = true })
 vim.keymap.set('n', '<A-L>', ':tabm+1<CR>', { desc = 'Move tab left', noremap = true, silent = true })
 
-vim.keymap.set('n', '<leader><leader>n', ':redraw!<CR>', { desc = 'Force redraw' })
-
 vim.keymap.set({'n'}, 'gp', '`[v`]', { desc = 'Select last pasted text' })
 
-vim.keymap.set('n', '<M-LeftMouse>', '<C-]>', { desc = 'Go to tag' })
-
--- text obejcts to select current line
-vim.keymap.set('x', 'al', 'g_o^', { desc = 'Current line' })
-vim.keymap.set('o', 'al', ':norm val<CR>', { desc = 'Current line' })
+vim.keymap.set('n', '<M-LeftMouse>', '<LeftMouse><C-]>', { desc = 'Go to tag' })
 
 local function toggle_quickfix()
   local quickfix_open = false
