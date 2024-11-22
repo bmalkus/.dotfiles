@@ -64,3 +64,21 @@ vim.keymap.set('n', '<M-LeftMouse>', '<C-]>', { desc = 'Go to tag' })
 -- text obejcts to select current line
 vim.keymap.set('x', 'al', 'g_o^', { desc = 'Current line' })
 vim.keymap.set('o', 'al', ':norm val<CR>', { desc = 'Current line' })
+
+local function toggle_quickfix()
+  local quickfix_open = false
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    if vim.api.nvim_win_get_config(win).relative == "" and vim.bo[vim.api.nvim_win_get_buf(win)].buftype == "quickfix" then
+      quickfix_open = true
+      break
+    end
+  end
+
+  if quickfix_open then
+    vim.cmd("cclose")
+  else
+    vim.cmd("copen")
+  end
+end
+
+vim.keymap.set("n", "zq", toggle_quickfix, { noremap = true, silent = true  })

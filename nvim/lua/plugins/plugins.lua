@@ -21,7 +21,10 @@ return {
     config = function()
       local lualine = require('lualine')
       lualine.setup {
-        extensions = { "nvim-tree" },
+        extensions = {
+          "nvim-tree",
+          "quickfix",
+        },
         options = {
           refresh = {
             statusline = 999999999,
@@ -76,6 +79,7 @@ return {
       vim.api.nvim_create_autocmd({
         'BufWritePost',
         'BufEnter',
+        'BufWinEnter',
         'DirChanged',
         'ModeChanged',
         'RecordingEnter',
@@ -618,6 +622,10 @@ return {
         detection_methods = { "lsp", "pattern" },
       }
     end
+  },
+  {
+    'kevinhwang91/nvim-bqf',
+    opts = {},
   },
 -- }}}
 -- {{{ syntaxes
