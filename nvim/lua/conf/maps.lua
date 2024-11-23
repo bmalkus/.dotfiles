@@ -1,23 +1,23 @@
 -- More info:
 -- :help nvim_set_keymap
 
-vim.keymap.set('', 'j', 'gj', { desc = 'Move down in wrapped lines more naturally', noremap = true })
-vim.keymap.set('', 'k', 'gk', { desc = 'Move up in wrapped lines more naturally', noremap = true })
+vim.keymap.set({'n', 'x'}, 'j', 'gj', { desc = 'Move down in wrapped lines more naturally', noremap = true })
+vim.keymap.set({'n', 'x'}, 'k', 'gk', { desc = 'Move up in wrapped lines more naturally', noremap = true })
 
-vim.keymap.set('', '<leader>q', ':q<CR>', { desc = 'Quit', silent = true })
-vim.keymap.set('', '<leader>w', ':w<CR>', { desc = 'Save current buffer', silent = true })
+vim.keymap.set('n', '<leader>q', ':q<CR>', { desc = 'Quit', silent = true })
+vim.keymap.set('n', '<leader>w', ':w<CR>', { desc = 'Save current buffer', silent = true })
 
-vim.keymap.set('', '<leader>n', ':noh<CR>', { desc = 'Disable search highlight', silent = true })
+vim.keymap.set('n', '<leader>n', ':noh<CR>', { desc = 'Disable search highlight', silent = true })
 
 vim.keymap.set('n', '<leader><tab>', ':b#<CR>', { desc = 'Switch to last buffer', silent = true })
 
-vim.keymap.set({'n', 'v'}, 'cy', '"+y', { desc = 'Copy to clipboard' })
-vim.keymap.set({'n', 'v'}, 'cY', '"+Y', { desc = 'Copy line(s) to clipboard' })
+vim.keymap.set({'n', 'x'}, 'cy', '"+y', { desc = 'Copy to clipboard' })
+vim.keymap.set({'n', 'x'}, 'cY', '"+Y', { desc = 'Copy line(s) to clipboard' })
 
-vim.keymap.set({'n', 'v'}, 'cp', '"+p', { desc = 'Paste from clipboard' })
-vim.keymap.set({'n', 'v'}, 'cP', '"+P', { desc = 'Paste from clipboard' })
-vim.keymap.set({'n', 'v'}, '0p', '"0p', { desc = 'Paste from yank buffer' })
-vim.keymap.set({'n', 'v'}, '0P', '"0P', { desc = 'Paste from yank buffer' })
+vim.keymap.set({'n', 'x'}, 'cp', '"+p', { desc = 'Paste from clipboard' })
+vim.keymap.set({'n', 'x'}, 'cP', '"+P', { desc = 'Paste from clipboard' })
+vim.keymap.set({'n', 'x'}, '0p', '"0p', { desc = 'Paste from yank buffer' })
+vim.keymap.set({'n', 'x'}, '0P', '"0P', { desc = 'Paste from yank buffer' })
 
 vim.keymap.set({'i'}, 'jj', '<esc>', { desc = 'Exit from insert mode' })
 

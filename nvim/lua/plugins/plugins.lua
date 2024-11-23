@@ -99,7 +99,7 @@ return {
         group = my_au_grp,
         callback = function()
           local timer = vim.uv.new_timer()
-          timer:start(00, 0, function()
+          timer:start(0, 0, function()
             vim.schedule(lualine.refresh)
           end)
         end,
@@ -114,7 +114,7 @@ return {
       {
         "<leader>?",
         function()
-          require("which-key").show({ global = false })
+          require("which-key").show()
         end,
         desc = "Buffer Local Keymaps (which-key)",
       },
@@ -263,7 +263,7 @@ return {
     config = function()
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
-          vim.keymap.set('n', '<A-CR>', vim.lsp.buf.code_action, { desc = 'Code action' })
+          vim.keymap.set('n', '<leader>la', vim.lsp.buf.code_action, { desc = 'Code action' })
           vim.keymap.set('n', '<leader>lq', vim.diagnostic.setloclist, { desc = 'Add diagnostics to Quickfix list and open' })
           vim.keymap.set('n', '<leader>lr', function()
             vim.lsp.buf.rename()
@@ -317,29 +317,21 @@ return {
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-path',
-      'hrsh7th/cmp-cmdline'
+      'hrsh7th/cmp-cmdline',
     },
     config = function()
       local cmp = require'cmp'
 
       cmp.setup({
-        window = {
-          -- completion = cmp.config.window.bordered(),
-          -- documentation = cmp.config.window.bordered(),
-        },
-        mapping = cmp.mapping.preset.insert({
-          ['<C-j>'] = cmp.mapping.select_next_item(),
-          ['<C-k>'] = cmp.mapping.select_prev_item(),
+        mapping = {
           ['<Tab>'] = cmp.mapping.select_next_item(),
           ['<S-Tab>'] = cmp.mapping.select_prev_item(),
           ['<C-u>'] = cmp.mapping.scroll_docs(-4),
           ['<C-d>'] = cmp.mapping.scroll_docs(4),
           ['<CR>'] = cmp.mapping.confirm({ select = false }),
-          -- ['<Tab>'] = cmp.mapping.confirm({ select = true }),
           ['<C-Space>'] = cmp.mapping.complete(),
           ['<C-e>'] = cmp.mapping.abort(),
-          -- ['<Esc>'] = cmp.mapping.abort(),
-        }),
+        },
         sources = cmp.config.sources({
           { name = 'nvim_lsp' },
           { name = 'path' },
@@ -562,17 +554,17 @@ return {
         -- distance_method = require('hop.hint').readwise_distance,
       })
 
-      vim.keymap.set('', 'f', function() hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true }) end, { desc = "Hop to letter", remap=true })
-      vim.keymap.set('', 'F', function() hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true }) end, { desc = "Hop backwards to letter", remap=true })
-      vim.keymap.set('', 't', function() hop.hint_char1({ direction = directions.AFTER_CURSOR, hint_offset = -1, current_line_only = true }) end, { desc = "Hop till letter", remap=true })
-      vim.keymap.set('', 'T', function() hop.hint_char1({ direction = directions.BEFORE_CURSOR, hint_offset = 1, current_line_only = true }) end, { desc = "Hop backwards till letter", remap=true })
-      vim.keymap.set('', '<leader>s', function() hop.hint_char2() end, { desc = "Hop to 2-char sequence", remap=true })
-      vim.keymap.set('', '<leader><leader>w', function() hop.hint_words({ direction = directions.AFTER_CURSOR }) end, { desc = "Hop to word", remap=true })
-      vim.keymap.set('', '<leader><leader>W', function() hop.hint_patterns({ direction = directions.AFTER_CURSOR }, '\\S\\+') end, { desc = "Hop to Word", remap=true })
-      vim.keymap.set('', '<leader><leader>b', function() hop.hint_words({ direction = directions.BEFORE_CURSOR }) end, { desc = "Hop backwards to word", remap=true })
-      vim.keymap.set('', '<leader><leader>B', function() hop.hint_patterns({ direction = directions.BEFORE_CURSOR }, '\\S\\+') end, { desc = "Hop backwards to Word", remap=true })
-      vim.keymap.set('', '<leader><leader>j', function() hop.hint_lines_skip_whitespace({ direction = directions.AFTER_CURSOR }) end, { desc = "Hop to line", remap=true })
-      vim.keymap.set('', '<leader><leader>k', function() hop.hint_lines_skip_whitespace({ direction = directions.BEFORE_CURSOR }) end, { desc = "Hop backwards to line", remap=true })
+      vim.keymap.set({ 'n', 'x' }, 'f', function() hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true }) end, { desc = "Hop to letter", remap=true })
+      vim.keymap.set({ 'n', 'x' }, 'F', function() hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true }) end, { desc = "Hop backwards to letter", remap=true })
+      vim.keymap.set({ 'n', 'x' }, 't', function() hop.hint_char1({ direction = directions.AFTER_CURSOR, hint_offset = -1, current_line_only = true }) end, { desc = "Hop till letter", remap=true })
+      vim.keymap.set({ 'n', 'x' }, 'T', function() hop.hint_char1({ direction = directions.BEFORE_CURSOR, hint_offset = 1, current_line_only = true }) end, { desc = "Hop backwards till letter", remap=true })
+      vim.keymap.set({ 'n', 'x' }, '<leader>s', function() hop.hint_char2() end, { desc = "Hop to 2-char sequence", remap=true })
+      vim.keymap.set({ 'n', 'x' }, '<leader><leader>w', function() hop.hint_words({ direction = directions.AFTER_CURSOR }) end, { desc = "Hop to word", remap=true })
+      vim.keymap.set({ 'n', 'x' }, '<leader><leader>W', function() hop.hint_patterns({ direction = directions.AFTER_CURSOR }, '\\S\\+') end, { desc = "Hop to Word", remap=true })
+      vim.keymap.set({ 'n', 'x' }, '<leader><leader>b', function() hop.hint_words({ direction = directions.BEFORE_CURSOR }) end, { desc = "Hop backwards to word", remap=true })
+      vim.keymap.set({ 'n', 'x' }, '<leader><leader>B', function() hop.hint_patterns({ direction = directions.BEFORE_CURSOR }, '\\S\\+') end, { desc = "Hop backwards to Word", remap=true })
+      vim.keymap.set({ 'n', 'x' }, '<leader><leader>j', function() hop.hint_lines_skip_whitespace({ direction = directions.AFTER_CURSOR }) end, { desc = "Hop to line", remap=true })
+      vim.keymap.set({ 'n', 'x' }, '<leader><leader>k', function() hop.hint_lines_skip_whitespace({ direction = directions.BEFORE_CURSOR }) end, { desc = "Hop backwards to line", remap=true })
     end
   },
 -- }}}
