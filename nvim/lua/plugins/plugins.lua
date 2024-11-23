@@ -45,6 +45,10 @@ return {
               cond = require("noice").api.statusline.mode.has,
               color = { fg = "#ff9e64" },
             },
+            {
+              'copilot',
+              show_colors = true
+            },
             'encoding',
             'fileformat',
             'filetype',
@@ -218,6 +222,11 @@ return {
     event = 'VeryLazy',
     config = function()
       require("nvim-tree").setup {
+        filters = {
+          custom = { '^\\.git' },
+          git_ignored = false,
+          dotfiles = false
+        },
         on_attach = function(bufnr)
           local api = require "nvim-tree.api"
           local function opts(desc)
@@ -321,22 +330,57 @@ return {
     },
     config = function()
       local cmp = require'cmp'
+      -- local has_words_before = function()
+      --   if vim.api.nvim_get_option_value("buftype", { buf = 0 }) == "prompt" then return false end
+      --   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+      --   return col ~= 0 and vim.api.nvim_buf_get_text(0, line-1, 0, line-1, col, {})[1]:match("^%s*$") == nil
+      -- end
 
       cmp.setup({
         mapping = {
           ['<Tab>'] = cmp.mapping.select_next_item(),
+          ['<C-n>'] = cmp.mapping.select_next_item(),
           ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+          ['<C-p>'] = cmp.mapping.select_prev_item(),
           ['<C-u>'] = cmp.mapping.scroll_docs(-4),
           ['<C-d>'] = cmp.mapping.scroll_docs(4),
           ['<CR>'] = cmp.mapping.confirm({ select = false }),
+          ['<C-j>'] = cmp.mapping.confirm({ select = false }),
           ['<C-Space>'] = cmp.mapping.complete(),
           ['<C-e>'] = cmp.mapping.abort(),
+          -- ['<Tab>'] = vim.schedule_wrap(function(fallback)
+          --   if cmp.visible() and has_words_before() then
+          --     cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+          --   else
+          --     fallback()
+          --   end
+          -- end),
+          -- ['<S-Tab>'] = vim.schedule_wrap(function(fallback)
+          --   if cmp.visible() and has_words_before() then
+          --     cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+          --   else
+          --     fallback()
+          --   end
+          -- end),
         },
         sources = cmp.config.sources({
+          { name = 'copilot' },
           { name = 'nvim_lsp' },
           { name = 'path' },
         }, {
-          { name = 'buffer' },
+          {
+            name = 'buffer',
+            option = {
+              get_bufnrs = function()
+                local buf = vim.api.nvim_get_current_buf()
+                local byte_size = vim.api.nvim_buf_get_offset(buf, vim.api.nvim_buf_line_count(buf))
+                if byte_size > 1024 * 1024 then -- 1 Megabyte max
+                  return {}
+                end
+                return { buf }
+              end
+            },
+          },
         })
       })
       cmp.setup.cmdline(':', {
@@ -368,6 +412,25 @@ return {
       end, { desc = 'Cancel completion or move to the end of line', silent = true })
     end
   },
+  {
+    "zbirenbaum/copilot.lua",
+    enabled = enable_copilot,
+    cmd = "Copilot",
+    event = "InsertEnter",
+    config = function ()
+      require("copilot").setup({
+        suggestion = { enabled = false },
+        panel = { enabled = false },
+      })
+    end
+  },
+  {
+    "zbirenbaum/copilot-cmp",
+    config = function ()
+      require("copilot_cmp").setup()
+    end
+  },
+  { 'AndreM222/copilot-lualine'  },
 -- }}}
 -- {{{ treesitter
   {
