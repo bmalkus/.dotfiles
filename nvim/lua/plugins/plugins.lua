@@ -330,11 +330,6 @@ return {
     },
     config = function()
       local cmp = require'cmp'
-      -- local has_words_before = function()
-      --   if vim.api.nvim_get_option_value("buftype", { buf = 0 }) == "prompt" then return false end
-      --   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-      --   return col ~= 0 and vim.api.nvim_buf_get_text(0, line-1, 0, line-1, col, {})[1]:match("^%s*$") == nil
-      -- end
 
       cmp.setup({
         mapping = {
@@ -345,26 +340,11 @@ return {
           ['<C-u>'] = cmp.mapping.scroll_docs(-4),
           ['<C-d>'] = cmp.mapping.scroll_docs(4),
           ['<CR>'] = cmp.mapping.confirm({ select = false }),
-          ['<C-j>'] = cmp.mapping.confirm({ select = false }),
           ['<C-Space>'] = cmp.mapping.complete(),
-          ['<C-e>'] = cmp.mapping.abort(),
-          -- ['<Tab>'] = vim.schedule_wrap(function(fallback)
-          --   if cmp.visible() and has_words_before() then
-          --     cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
-          --   else
-          --     fallback()
-          --   end
-          -- end),
-          -- ['<S-Tab>'] = vim.schedule_wrap(function(fallback)
-          --   if cmp.visible() and has_words_before() then
-          --     cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
-          --   else
-          --     fallback()
-          --   end
-          -- end),
+          ['<C-h>'] = cmp.mapping.abort(),
         },
         sources = cmp.config.sources({
-          { name = 'copilot' },
+          -- { name = 'copilot' },
           { name = 'nvim_lsp' },
           { name = 'path' },
         }, {
@@ -402,14 +382,6 @@ return {
           { name = 'buffer' }
         }
       })
-
-      vim.keymap.set({'i'}, '<C-e>', function()
-        if cmp.visible() then
-          cmp.abort()
-        else
-          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-o>$', true, false, true), 'n', true)
-        end
-      end, { desc = 'Cancel completion or move to the end of line', silent = true })
     end
   },
   {
@@ -418,18 +390,71 @@ return {
     cmd = "Copilot",
     event = "InsertEnter",
     config = function ()
-      require("copilot").setup({
-        suggestion = { enabled = false },
-        panel = { enabled = false },
+      local copilot = require("copilot")
+      copilot.setup({
+        panel = {
+          enabled = true,
+          auto_refresh = false,
+          keymap = {
+            jump_prev = "[[",
+            jump_next = "]]",
+            accept = "<CR>",
+            refresh = "gr",
+            open = "<A-CR>"
+          },
+          layout = {
+            position = "bottom", -- | top | left | right
+            ratio = 0.4
+          },
+        },
+        suggestion = {
+          enabled = true,
+          auto_trigger = true,
+          hide_during_completion = false,
+          debounce = 0,
+          keymap = {
+            accept = "<A-g>",
+            accept_word = nil,
+            accept_line = nil,
+            next = "<C-j>",
+            prev = "<C-k>",
+            dismiss = "<C-h>",
+          },
+        },
       })
+
+      local suggestion = require 'copilot.suggestion'
+      vim.keymap.set({'i'}, '<Tab>', function()
+        if suggestion.is_visible() then
+          suggestion.accept()
+        else
+          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Tab>', true, false, true), 'n', false)
+        end
+      end, { desc = 'Accept copilot suggestion or regular tab', noremap = true })
+
+      vim.keymap.set({'i'}, '<A-f>', function()
+        if suggestion.is_visible() then
+          suggestion.accept_word()
+        else
+          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<S-Right>', true, false, true), 'n', false)
+        end
+      end, { desc = 'Accept copilot word or move to the next word', noremap = true })
+
+      vim.keymap.set({'i'}, '<C-e>', function()
+        if suggestion.is_visible() then
+          suggestion.accept_line()
+        else
+          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<End>', true, false, true), 'n', false)
+        end
+      end, { desc = 'Accept copilot line or move to the end of line', noremap = true })
     end
   },
-  {
-    "zbirenbaum/copilot-cmp",
-    config = function ()
-      require("copilot_cmp").setup()
-    end
-  },
+  -- {
+  --   "zbirenbaum/copilot-cmp",
+  --   config = function ()
+  --     require("copilot_cmp").setup()
+  --   end
+  -- },
   { 'AndreM222/copilot-lualine'  },
 -- }}}
 -- {{{ treesitter
@@ -728,20 +753,4 @@ return {
     end,
   },
 -- }}}
-  -- {
-  --   "benlubas/molten-nvim",
-  --   version = "^1.0.0", -- use version <2.0.0 to avoid breaking changes
-  --   build = ":UpdateRemotePlugins",
-  --   init = function()
-  --     -- these are examples, not defaults. Please see the readme
-  --     -- vim.g.molten_image_provider = "image.nvim"
-  --     vim.g.molten_output_win_max_height = 20
-  --     vim.g.molten_virt_text_output = true
-
-  --     vim.keymap.set("v", "<leader>e", ":<C-u>MoltenEvaluateVisual<CR>", { silent = true, desc = "evaluate visual selection" })
-  --     vim.keymap.set("n", "<leader>e", ":MoltenEvaluateOperator<CR>", { silent = true, desc = "evaluate visual selection" })
-  --     vim.keymap.set('n', '<leader>mo', ':noautocmd MoltenEnterOutput<CR>', { desc = 'Enter Molten output window', silent = true })
-  --     vim.keymap.set('n', '<leader>r', ':MoltenReevaluateCell<CR>', { desc = 'Revaluate cell', silent = true })
-  --   end,
-  -- },
 }
