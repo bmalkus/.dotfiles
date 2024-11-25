@@ -38,9 +38,9 @@ vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower spl
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper split', noremap = true })
 
 vim.keymap.set('n', '+', '10<C-w>>', { desc = 'Grow split vertically', noremap = true })
-vim.keymap.set('n', '-', '10<C-w><', { desc = 'Shrink split vertically', noremap = true })
+vim.keymap.set('n', '_', '10<C-w><', { desc = 'Shrink split vertically', noremap = true })
 vim.keymap.set('n', '<A-+>', '5<C-w>+', { desc = 'Grow split horizontally', noremap = true })
-vim.keymap.set('n', '<A-->', '5<C-w>-', { desc = 'Shrink split horizontally', noremap = true })
+vim.keymap.set('n', '<A-_>', '5<C-w>-', { desc = 'Shrink split horizontally', noremap = true })
 
 vim.keymap.set('n', '<A-t>', ':tabnew %<CR>', { desc = 'New tab with current file', noremap = true })
 
@@ -48,6 +48,9 @@ vim.keymap.set('n', '<A-h>', 'gT', { desc = 'Move focus to the next tab', norema
 vim.keymap.set('n', '<A-l>', 'gt', { desc = 'Move focus to the previous tab', noremap = true })
 vim.keymap.set('n', '<A-H>', ':tabm-1<CR>', { desc = 'Move tab right', noremap = true, silent = true })
 vim.keymap.set('n', '<A-L>', ':tabm+1<CR>', { desc = 'Move tab left', noremap = true, silent = true })
+
+-- terminal mappings
+vim.api.nvim_set_keymap('t', '<C-t>', '<C-\\><C-n>', { desc = 'Exit insert mode in terminal', noremap = true, silent = true })
 
 vim.keymap.set({'n'}, 'gp', '`[v`]', { desc = 'Select last pasted text' })
 

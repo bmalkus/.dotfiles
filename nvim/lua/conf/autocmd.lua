@@ -25,6 +25,7 @@ vim.api.nvim_create_autocmd('FileType', {
   group = my_au_grp,
   callback = function()
     vim.opt_local.spell = true
+    vim.opt_local.wrap = true
   end,
 })
 

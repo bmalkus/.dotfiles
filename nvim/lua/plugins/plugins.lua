@@ -207,9 +207,16 @@ return {
         end, { buffer = bufnr, desc = 'Previous git hunk' })
 
         vim.keymap.set('n', '<leader>hp', gitsigns.preview_hunk, { buffer = bufnr, desc = 'Preview hunk' })
-        vim.keymap.set('n', '<leader>hb', function() gitsigns.blame_line{full=true} end, { buffer = bufnr, desc = 'Blame line' })
+        vim.keymap.set('n', '<leader>hB', function() gitsigns.blame_line{ full=true } end, { buffer = bufnr, desc = 'Blame line' })
         vim.keymap.set('n', '<leader>hd', gitsigns.diffthis, { buffer = bufnr, desc = 'Diff changes' })
         vim.keymap.set('n', '<leader>hD', function() gitsigns.diffthis('~') end, { buffer = bufnr, desc = 'Diff with previous commit' })
+        vim.keymap.set('n', '<leader>hr', gitsigns.reset_hunk, { buffer = bufnr, desc = 'Reset hunk' })
+        vim.keymap.set('v', '<leader>hr', function() gitsigns.reset_hunk { vim.fn.line('.'), vim.fn.line('v') } end, { buffer = bufnr, desc = 'Reset hunks in selection' })
+        vim.keymap.set('n', '<leader>hR', gitsigns.reset_buffer, { buffer = bufnr, desc = 'Reset whole buffer' })
+
+        vim.keymap.set('n', '<leader>hb', gitsigns.toggle_current_line_blame, { buffer = bufnr, desc = 'Toggle blame lines' })
+        vim.keymap.set('n', '<leader>h-', gitsigns.toggle_deleted, { buffer = bufnr, desc = 'Toggle show deleted' })
+        vim.keymap.set('n', '<leader>h+', gitsigns.toggle_linehl, { buffer = bufnr, desc = 'Toggle highligth modified' })
       end
     },
   },
