@@ -386,7 +386,7 @@ return {
   },
   {
     "zbirenbaum/copilot.lua",
-    enabled = enable_copilot,
+    enabled = function() return enable_copilot ~= nil and enable_copilot end,
     cmd = "Copilot",
     event = "InsertEnter",
     config = function ()
