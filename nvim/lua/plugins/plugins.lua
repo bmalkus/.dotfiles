@@ -176,6 +176,7 @@ return {
     "rcarriga/nvim-notify",
     event = "VeryLazy",
     opts = {
+      stages = notify_static and 'static' or 'fade_in_slide_out',
       top_down = false,
       -- render = "wrapped-compact",
     }
