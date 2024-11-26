@@ -1,3 +1,7 @@
+if enable_copilot == nil then enable_copilot = true end
+if notify_static == nil then notify_static = false end
+if enable_noice == nil then enable_noice = true end
+
 return {
   -- {{{ look & feel
   {
