@@ -19,6 +19,26 @@ return {
   {
     'nvim-lualine/lualine.nvim',
     config = function()
+      pcall(require, "noice")
+      local hasNoice = package.loaded["noice"] ~= nil
+      local lualine_x = {
+        {
+          'copilot',
+          show_colors = true
+        },
+        'encoding',
+        'fileformat',
+        'filetype',
+      }
+      if hasNoice then
+        local macroRecIndicator = {
+          require("noice").api.statusline.mode.get,
+          cond = require("noice").api.statusline.mode.has,
+          color = { fg = "#ff9e64" },
+        }
+        table.insert(lualine_x, 1, macroRecIndicator)
+      end
+
       local lualine = require('lualine')
       lualine.setup {
         extensions = {
@@ -39,20 +59,7 @@ return {
               path = 4,
             }
           },
-          lualine_x = {
-            {
-              require("noice").api.statusline.mode.get,
-              cond = require("noice").api.statusline.mode.has,
-              color = { fg = "#ff9e64" },
-            },
-            {
-              'copilot',
-              show_colors = true
-            },
-            'encoding',
-            'fileformat',
-            'filetype',
-          },
+          lualine_x = lualine_x,
         },
       }
       -- custom refreshing of lualine, heavy artillery, but avoids
@@ -126,6 +133,7 @@ return {
   },
   {
     "folke/noice.nvim",
+    enabled = function() return enable_noice ~= nil and enable_noice end,
     event = "VeryLazy",
     opts = {
       views = {
