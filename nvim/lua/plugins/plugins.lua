@@ -1,4 +1,4 @@
-if enable_copilot == nil then enable_copilot = true end
+if enable_copilot == nil then enable_copilot = false end
 if notify_static == nil then notify_static = false end
 if enable_noice == nil then enable_noice = true end
 
@@ -243,7 +243,7 @@ return {
     config = function()
       require("nvim-tree").setup {
         filters = {
-          custom = { '^\\.git' },
+          custom = { '^\\.git/' },
           git_ignored = false,
           dotfiles = false
         },
