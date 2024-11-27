@@ -9,7 +9,7 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
-      vim.cmd([[colorscheme tokyonight]])
+      -- vim.cmd([[colorscheme tokyonight]])
     end,
   },
   {
@@ -17,7 +17,7 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
-      -- vim.cmd([[colorscheme rose-pine-moon]])
+      vim.cmd([[colorscheme rose-pine]])
     end,
   },
   {
@@ -337,6 +337,10 @@ return {
       }
       require'lspconfig'.pyright.setup{}
     end
+  },
+  {
+    "williamboman/mason.nvim",
+    opts = {},
   },
   {
     'hrsh7th/nvim-cmp',

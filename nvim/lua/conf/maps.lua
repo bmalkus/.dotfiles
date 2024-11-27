@@ -23,6 +23,7 @@ vim.keymap.set({'i'}, 'jj', '<esc>', { desc = 'Exit from insert mode' })
 
 vim.keymap.set({'i'}, '<C-a>', '<C-o>^', { desc = 'Move to the beggining of the line', noremap = false })
 vim.keymap.set({'c'}, '<C-a>', '<Home>', { desc = 'Move to the beggining of the line', noremap = false })
+vim.keymap.set({'i'}, '<C-e>', '<End>', { desc = 'Move to the end of the line', noremap = false })
 vim.keymap.set({'c'}, '<C-e>', '<End>', { desc = 'Move to the end of the line', noremap = false })
 vim.keymap.set({'i', 'c'}, '<C-l>', '<Right>', { desc = 'Move forward one character', noremap = false })
 vim.keymap.set({'i', 'c'}, '<A-f>', '<S-Right>', { desc = 'Move one word forward' })
