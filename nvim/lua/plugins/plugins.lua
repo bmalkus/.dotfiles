@@ -370,16 +370,19 @@ return {
         }, {
           {
             name = 'buffer',
-            option = {
-              get_bufnrs = function()
-                local buf = vim.api.nvim_get_current_buf()
-                local byte_size = vim.api.nvim_buf_get_offset(buf, vim.api.nvim_buf_line_count(buf))
-                if byte_size > 1024 * 1024 then -- 1 Megabyte max
-                  return {}
+              option = {
+                get_bufnrs = function()
+                  local bufs = {}
+                  for _, win in ipairs(vim.api.nvim_list_wins()) do
+                    local buf = vim.api.nvim_win_get_buf(win)
+                    local byte_size = vim.api.nvim_buf_get_offset(buf, vim.api.nvim_buf_line_count(buf))
+                    if byte_size < 1024 * 1024 then -- 1 Megabyte max
+                      bufs[buf] = true
+                    end
+                  end
+                  return vim.tbl_keys(bufs)
                 end
-                return { buf }
-              end
-            },
+              },
           },
         })
       })
@@ -740,8 +743,15 @@ return {
       vim.keymap.set('n', '<leader>c', builtin.commands, { desc = 'Telescope commands' })
       vim.keymap.set('n', '<leader>t', builtin.builtin, { desc = 'Telescope builtins' })
       vim.keymap.set('n', '<leader>m', builtin.marks, { desc = 'Telescope marks' })
-      vim.keymap.set('n', '<leader>P', require'telescope'.extensions.projects.projects, { desc = 'Telescope projects' })
       vim.keymap.set('n', '<C-p>', builtin.oldfiles, { desc = 'Telescope previous files' })
+
+      require('telescope').load_extension('projects')
+      vim.keymap.set('n', '<leader>P', require'telescope'.extensions.projects.projects, { desc = 'Telescope projects' })
+
+      if enable_noice then
+        require('telescope').load_extension('noice')
+        vim.keymap.set('n', '<leader>N', require'telescope'.extensions.noice.noice, { desc = 'Telescope noice' })
+      end
     end
   },
   {
