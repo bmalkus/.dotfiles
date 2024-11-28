@@ -1,6 +1,4 @@
-if enable_copilot == nil then enable_copilot = false end
-if notify_static == nil then notify_static = false end
-if enable_noice == nil then enable_noice = true end
+local L = require"conf.local"
 
 return {
   -- {{{ look & feel
@@ -137,7 +135,7 @@ return {
   },
   {
     "folke/noice.nvim",
-    enabled = function() return enable_noice ~= nil and enable_noice end,
+    enabled = L.enable_noice,
     event = "VeryLazy",
     opts = {
       views = {
@@ -180,7 +178,7 @@ return {
     "rcarriga/nvim-notify",
     event = "VeryLazy",
     opts = {
-      stages = notify_static and 'static' or 'fade_in_slide_out',
+      stages = L.notify_static and 'static' or 'fade_in_slide_out',
       top_down = false,
       -- render = "wrapped-compact",
     }
@@ -413,7 +411,7 @@ return {
   },
   {
     "zbirenbaum/copilot.lua",
-    enabled = function() return enable_copilot ~= nil and enable_copilot end,
+    enabled = L.enable_copilot,
     cmd = "Copilot",
     event = "InsertEnter",
     config = function ()
@@ -752,7 +750,7 @@ return {
       require('telescope').load_extension('projects')
       vim.keymap.set('n', '<leader>P', require'telescope'.extensions.projects.projects, { desc = 'Telescope projects' })
 
-      if enable_noice then
+      if L.enable_noice then
         require('telescope').load_extension('noice')
         vim.keymap.set('n', '<leader>N', require'telescope'.extensions.noice.noice, { desc = 'Telescope noice' })
       end

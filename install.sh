@@ -54,6 +54,7 @@ _install "$TARGET_DIR/fish_plugins"
 cd $HOME/.config
 
 _install "$TARGET_DIR/nvim"
+[ ! -e "./nvim/lua/conf/local.lua" ] && cp "./nvim/lua/conf/local.lua.template" "./nvim/lua/conf/local.lua"
 
 if [ ! -f "$TARGET_DIR/.vim/vim-plug/autoload/plug.vim" ]; then
   echo "Downloading plug.vim"

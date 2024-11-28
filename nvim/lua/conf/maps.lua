@@ -11,6 +11,19 @@ vim.keymap.set('n', '<leader>n', ':noh<CR>', { desc = 'Disable search highlight'
 
 vim.keymap.set('n', '<leader><tab>', ':b#<CR>', { desc = 'Switch to last buffer', silent = true })
 
+local function source_config_file()
+  local current_file_path = vim.fn.expand("%:p")
+  local file_ext = vim.fn.expand("%:e")
+  local nvim_config_dir = vim.fn.stdpath("config")
+  local dotfiles_dir = os.getenv("DOTFILES_DIR")
+
+  if (current_file_path:find(nvim_config_dir, 1, true) or current_file_path:find(dotfiles_dir, 1, true)) and file_ext == 'lua' then
+    vim.cmd("source " .. current_file_path)
+    vim.api.nvim_echo({{"Sourced: " .. current_file_path}}, true, {})
+  end
+end
+vim.keymap.set('n', '<leader>v', source_config_file, { desc = 'If in config dir and lua file is open, source it', silent = true })
+
 vim.keymap.set({'n', 'x'}, 'cy', '"+y', { desc = 'Copy to clipboard' })
 vim.keymap.set({'n', 'x'}, 'cY', '"+Y', { desc = 'Copy line(s) to clipboard' })
 
@@ -58,19 +71,19 @@ vim.keymap.set({'n'}, 'gp', '`[v`]', { desc = 'Select last pasted text' })
 vim.keymap.set('n', '<M-LeftMouse>', '<LeftMouse><C-]>', { desc = 'Go to tag' })
 
 local function toggle_quickfix()
-  local quickfix_open = false
-  for _, win in ipairs(vim.api.nvim_list_wins()) do
-    if vim.api.nvim_win_get_config(win).relative == "" and vim.bo[vim.api.nvim_win_get_buf(win)].buftype == "quickfix" then
-      quickfix_open = true
-      break
-    end
-  end
-
-  if quickfix_open then
+  if vim.fn.getqflist({ winid = 0 }).winid > 0 then
     vim.cmd("cclose")
   else
     vim.cmd("copen")
   end
 end
+vim.keymap.set("n", "zq", toggle_quickfix, { desc = 'Toggle quickfix list', noremap = true, silent = true  })
 
-vim.keymap.set("n", "zq", toggle_quickfix, { noremap = true, silent = true  })
+local function toggle_loclist()
+  if vim.fn.getloclist(0, { winid = 0 }).winid > 0 then
+    vim.cmd('lclose')
+  else
+    vim.cmd('lopen')
+  end
+end
+vim.keymap.set("n", "zl", toggle_loclist, { desc = 'Toggle location list', noremap = true, silent = true  })
