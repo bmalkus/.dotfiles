@@ -24,10 +24,7 @@ return {
       pcall(require, "noice")
       local hasNoice = package.loaded["noice"] ~= nil
       local lualine_x = {
-        {
-          'copilot',
-          show_colors = true
-        },
+        { 'copilot', show_colors = true },
         'encoding',
         'fileformat',
         'filetype',
@@ -56,12 +53,14 @@ return {
         },
         sections = {
           lualine_c = {
-            {
-              'filename',
-              path = 4,
-            }
+            { 'filename', path = 1, },
           },
           lualine_x = lualine_x,
+        },
+        inactive_sections = {
+          lualine_c = {
+            { 'filename', path = 1, },
+          },
         },
       }
       -- custom refreshing of lualine, heavy artillery, but avoids
