@@ -137,6 +137,18 @@ return {
     enabled = L.enable_noice,
     event = "VeryLazy",
     opts = {
+      commands = {
+        history = {
+          -- options for the message history that you get with `:Noice`
+          view = "popup",
+          opts = { enter = true, format = "details" },
+          filter = {
+            any = {
+              { cond = function(_) return true end }
+            },
+          }
+        },
+      },
       views = {
         cmdline_popup = {
           position = {
@@ -144,7 +156,7 @@ return {
             col = "50%",
           },
           size = {
-            width = 60,
+            width = 100,
             height = "auto",
           },
         },
@@ -766,7 +778,11 @@ return {
   },
   {
     'kevinhwang91/nvim-bqf',
-    opts = {},
+    opts = {
+      preview = {
+        winblend = 0
+      }
+    },
   },
 -- }}}
 -- {{{ syntaxes
