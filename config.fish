@@ -229,6 +229,7 @@ abbr -a gmc         git merge --continue
 abbr -a gpsup       git push --set-upstream origin "(__git.current_branch)"
 abbr -a gpsup!      git push --set-upstream --force-with-lease origin "(__git.current_branch)"
 
+abbr -a grbia       git rebase --interactive --autosquash
 abbr -a grf         git reflog
 abbr -a grm         git reset --mixed HEAD^
 

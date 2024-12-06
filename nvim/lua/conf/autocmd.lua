@@ -24,8 +24,8 @@ vim.api.nvim_create_autocmd('FileType', {
   desc = 'Set spell check for markdown files',
   group = my_au_grp,
   callback = function()
-    vim.opt_local.spell = true
-    vim.opt_local.wrap = true
+    vim.wo.spell = true
+    vim.wo.wrap = true
   end,
 })
 
@@ -34,6 +34,6 @@ vim.api.nvim_create_autocmd('FileType', {
   desc = 'Set formatprg for json files',
   group = my_au_grp,
   callback = function()
-    vim.opt_local.formatprg = 'jq'
+    vim.bo.formatprg = 'jq'
   end,
 })

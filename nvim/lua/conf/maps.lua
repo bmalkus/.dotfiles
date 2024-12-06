@@ -52,9 +52,9 @@ vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower spl
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper split', noremap = true })
 
 vim.keymap.set('n', '+', '10<C-w>>', { desc = 'Grow split vertically', noremap = true })
-vim.keymap.set('n', '_', '10<C-w><', { desc = 'Shrink split vertically', noremap = true })
+vim.keymap.set('n', '-', '10<C-w><', { desc = 'Shrink split vertically', noremap = true })
 vim.keymap.set('n', '<A-+>', '5<C-w>+', { desc = 'Grow split horizontally', noremap = true })
-vim.keymap.set('n', '<A-_>', '5<C-w>-', { desc = 'Shrink split horizontally', noremap = true })
+vim.keymap.set('n', '<A-->', '5<C-w>-', { desc = 'Shrink split horizontally', noremap = true })
 
 vim.keymap.set('n', '<A-t>', ':tabnew %<CR>', { desc = 'New tab with current file', noremap = true })
 

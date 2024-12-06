@@ -252,9 +252,24 @@ return {
     config = function()
       require("nvim-tree").setup {
         filters = {
-          custom = { '^\\.git/' },
+          custom = {
+            '^\\.git$',
+            '^__pycache__$',
+            '^.DS_Store$',
+            unpack(L.nvim_tree_filters or {})
+          },
           git_ignored = false,
           dotfiles = false
+        },
+        live_filter = {
+          always_show_folders = false
+        },
+        actions = {
+          open_file = {
+            window_picker = {
+              chars = "asdfhjklertyui"
+            }
+          }
         },
         on_attach = function(bufnr)
           local api = require "nvim-tree.api"
