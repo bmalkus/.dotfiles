@@ -37,3 +37,75 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.bo.formatprg = 'jq'
   end,
 })
+
+-- autosave
+local L = require"conf.local"
+
+if L.autosave then
+  local function get_save_buf_fn(buf)
+    return function()
+      vim.schedule(function()
+        vim.api.nvim_buf_call(buf, function()
+          vim.cmd("silent! noautocmd write")
+          require('lualine').refresh()
+        end)
+      end)
+    end
+  end
+
+  local delay_write_timers = {}
+  local autosave_au_grp = vim.api.nvim_create_augroup('autosave-au', { clear = true })
+
+  vim.api.nvim_create_autocmd({
+    'BufEnter',
+    'FocusGained',
+  }, {
+    desc = 'Automatically check files for external changes',
+    group = autosave_au_grp,
+    callback = function()
+      vim.cmd('checktime')
+    end,
+  })
+
+  vim.api.nvim_create_autocmd({
+    'InsertLeave',
+    'TextChanged',
+  }, {
+    desc = 'Autosave',
+    group = autosave_au_grp,
+    callback = function()
+      if vim.bo.modifiable and vim.bo.buftype == '' then
+        local buf = vim.api.nvim_get_current_buf()
+        local timer = delay_write_timers[buf]
+        if delay_write_timers[buf] == nil then
+          delay_write_timers[buf] = vim.uv.new_timer()
+          timer = delay_write_timers[buf]
+        else
+          timer:stop()
+        end
+        timer:start(L.autosave_delay, 0, get_save_buf_fn(buf))
+      end
+    end,
+  })
+
+  vim.api.nvim_create_autocmd({
+    'BufLeave',
+    'FocusLost',
+  }, {
+    desc = 'Autosave',
+    group = autosave_au_grp,
+    callback = function()
+      if vim.bo.modifiable and vim.bo.buftype == '' then
+        if vim.fn.getbufinfo(0)[1] ~= nil and vim.fn.getbufinfo(0)[1].changed == 1 then
+          vim.cmd("silent! noautocmd write")
+          require('lualine').refresh()
+          local buf = vim.api.nvim_get_current_buf()
+          local timer = delay_write_timers[buf]
+          if timer ~= nil then
+            timer:stop()
+          end
+        end
+      end
+    end,
+  })
+end

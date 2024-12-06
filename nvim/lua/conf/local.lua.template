@@ -5,6 +5,9 @@ M.notify_static = false
 M.enable_noice = true
 M.nvim_tree_filters = {}
 
+M.autosave = false
+M.autosave_delay = 2000
+
 return M
 
 -- vim:ft=lua
