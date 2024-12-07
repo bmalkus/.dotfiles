@@ -38,8 +38,16 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
--- autosave
 local L = require"conf.local"
+
+-- autoformat python files
+
+if L.autoformat_python then
+  vim.api.nvim_create_autocmd({ 'BufWritePost' }, { pattern = { "*.py", "*.pyi" }, group = my_au_grp, command = 'Black' })
+  vim.api.nvim_create_autocmd({ 'BufWritePost' }, { pattern = { "*.py", "*.pyi" }, group = my_au_grp, command = 'Isort' })
+end
+
+-- autosave
 
 if L.autosave then
   local function get_save_buf_fn(buf)
