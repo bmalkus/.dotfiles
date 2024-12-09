@@ -15,6 +15,14 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
+      require("rose-pine").setup({
+        dim_inactive_windows = true,
+        palette = {
+          main = {
+            _nc = "#110818"
+          }
+        }
+      })
       vim.cmd([[colorscheme rose-pine]])
     end,
   },
