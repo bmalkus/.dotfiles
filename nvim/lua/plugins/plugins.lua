@@ -767,8 +767,13 @@ return {
             "--smart-case",
             -- add your options
             "--hidden",
+          },
+          mappings = {
+            i = {
+              ["<esc>"] = require('telescope.actions').close,
+            },
           }
-        }
+        },
       })
       local builtin = require('telescope.builtin')
       vim.keymap.set('n', '<leader>f', builtin.git_files, { desc = 'Telescope find git files' })
