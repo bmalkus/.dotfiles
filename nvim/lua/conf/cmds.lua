@@ -14,5 +14,5 @@ vim.api.nvim_create_user_command('Isort', function()
   if vim.b.python_line_length ~= nil then
     line_length = vim.b.python_line_length
   end
-  vim.cmd('!cd ' .. vim.lsp.get_clients()[1].config.root_dir .. ' && isort --profile=black --line-length=' .. line_length .. ' %:p')
+  vim.cmd('!cd ' .. vim.lsp.get_clients({ bufnr = 0 })[1].config.root_dir .. ' && isort --profile=black --line-length=' .. line_length .. ' %:p')
 end, {})
