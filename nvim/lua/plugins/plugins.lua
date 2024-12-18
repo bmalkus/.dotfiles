@@ -701,6 +701,12 @@ return {
       }
     end
   },
+  {
+    'junegunn/vim-easy-align',
+    config = function()
+      vim.keymap.set({'n', 'x'}, 'ga', ":LiveEasyAlign<CR>", { desc = 'LiveEasyAlign', silent = true })
+    end
+  },
   -- }}}
 -- {{{ easymotions
   {
