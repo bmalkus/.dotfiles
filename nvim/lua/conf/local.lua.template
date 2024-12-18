@@ -8,6 +8,8 @@ M.nvim_tree_filters = {}
 M.autosave = false
 M.autosave_delay = 2000
 
+M.golden_ratio = false
+
 M.def_python_line_length = 120
 M.autoformat_python = false
 
