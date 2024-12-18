@@ -19,7 +19,12 @@ return {
         dim_inactive_windows = true,
         palette = {
           main = {
-            _nc = "#110818"
+            -- _nc = "#1F1C2A",
+            -- base = "#110818",
+            -- surface = "#130A1A"
+            base = "#161421",
+            _nc = "#25202E",
+            surface = "#191724"
           }
         }
       })
@@ -685,6 +690,15 @@ return {
     'machakann/vim-sandwich',
     config = function()
       vim.api.nvim_command("runtime macros/sandwich/keymap/surround.vim")
+
+      vim.g['sandwich#magicchar#f#patterns'] = {
+        {
+          header = '\\<\\%(\\h\\k*\\.\\)*\\h\\k*',
+          bra    = '(',
+          ket    = ')',
+          footer = '',
+        },
+      }
     end
   },
   -- }}}
