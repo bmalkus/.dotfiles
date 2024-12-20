@@ -577,3 +577,15 @@ if L.golden_ratio then
 end
 
 -- }}}
+
+-- must be after golden-ratio autocmds
+vim.api.nvim_create_autocmd({
+  'BufEnter',
+  'WinEnter',
+}, {
+  desc = 'Automatically move the view as far left as possible',
+  group = my_au_grp,
+  callback = function()
+    vim.cmd('normal! ze')
+  end,
+})
