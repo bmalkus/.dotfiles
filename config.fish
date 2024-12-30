@@ -241,7 +241,7 @@ abbr -a guc         git reset --soft HEAD^
 abbr -a gunignore   git update-index --no-skip-worktree
 
 function gwip -d "git commit a work-in-progress branch"
-  git add -A; git rm (git ls-files --deleted) 2> /dev/null; git commit -m "--wip-- [ci skip]"
+  git add -A; git rm (git ls-files --deleted) 2> /dev/null; git commit -n -m "--wip-- [ci skip]"
 end
 
 function last_history_item

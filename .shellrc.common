@@ -25,6 +25,8 @@ command -v vim >/dev/null 2>&1 &&
   export EDITOR=vim
 command -v vimx >/dev/null 2>&1 &&
   export EDITOR=vimx
+command -v nvim >/dev/null 2>&1 &&
+  export EDITOR=nvim
 
 export FZF_DEFAULT_OPTS="--color fg:187,bg:233,hl:103,fg+:222,bg+:234,hl+:104 \
   --color info:183,prompt:110,spinner:107,pointer:167,marker:215 \
