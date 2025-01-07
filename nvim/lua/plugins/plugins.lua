@@ -149,54 +149,57 @@ return {
     "folke/noice.nvim",
     enabled = L.enable_noice,
     event = "VeryLazy",
-    opts = {
-      commands = {
-        history = {
-          -- options for the message history that you get with `:Noice`
-          view = "popup",
-          opts = { enter = true, format = "details" },
-          filter = {
-            any = {
-              { cond = function(_) return true end }
-            },
-          }
-        },
-      },
-      views = {
-        cmdline_popup = {
-          position = {
-            row = 5,
-            col = "50%",
-          },
-          size = {
-            width = 100,
-            height = "auto",
-          },
-        },
-        popupmenu = {
-          relative = "editor",
-          position = {
-            row = 8,
-            col = "50%",
-          },
-          size = {
-            width = 60,
-            height = 10,
-          },
-          border = {
-            style = "rounded",
-            padding = { 0, 1 },
-          },
-          win_options = {
-            winhighlight = { Normal = "Normal", FloatBorder = "DiagnosticInfo" },
-          },
-        },
-      },
-    },
     dependencies = {
       "MunifTanjim/nui.nvim",
       "rcarriga/nvim-notify",
-    }
+    },
+    config = function()
+      require('noice').setup({
+        commands = {
+          history = {
+            -- options for the message history that you get with `:Noice`
+            view = "popup",
+            opts = { enter = true, format = "details" },
+            filter = {
+              any = {
+                { cond = function(_) return true end }
+              },
+            }
+          },
+        },
+        views = {
+          cmdline_popup = {
+            position = {
+              row = 5,
+              col = "50%",
+            },
+            size = {
+              width = 100,
+              height = "auto",
+            },
+          },
+          popupmenu = {
+            relative = "editor",
+            position = {
+              row = 8,
+              col = "50%",
+            },
+            size = {
+              width = 60,
+              height = 10,
+            },
+            border = {
+              style = "rounded",
+              padding = { 0, 1 },
+            },
+            win_options = {
+              winhighlight = { Normal = "Normal", FloatBorder = "DiagnosticInfo" },
+            },
+          },
+        },
+      })
+      vim.keymap.set('n', '<leader>d', function() vim.cmd('NoiceDismiss') end, { desc = 'Dismiss noice notifications' })
+    end,
   },
   {
     "rcarriga/nvim-notify",
