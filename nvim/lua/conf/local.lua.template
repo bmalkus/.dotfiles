@@ -1,7 +1,7 @@
 local M = {}
 
 M.enable_copilot = false
-M.notify_static = false
+M.notify_static = true
 M.enable_noice = true
 M.nvim_tree_filters = {}
 
