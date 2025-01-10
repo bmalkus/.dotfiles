@@ -63,6 +63,9 @@ vim.keymap.set('n', '<A-l>', 'gt', { desc = 'Move focus to the previous tab', no
 vim.keymap.set('n', '<A-H>', ':tabm-1<CR>', { desc = 'Move tab right', noremap = true, silent = true })
 vim.keymap.set('n', '<A-L>', ':tabm+1<CR>', { desc = 'Move tab left', noremap = true, silent = true })
 
+vim.keymap.set('n', '<C-w>]', ':vert stag<CR>', { desc = 'Go to tag in vertical split', silent = true })
+vim.keymap.set('n', '<C-w><C-]>', ':vert stag<CR>', { desc = 'Go to tag in vertical split', silent = true })
+
 -- terminal mappings
 vim.api.nvim_set_keymap('t', '<C-t>', '<C-\\><C-n>', { desc = 'Exit insert mode in terminal', noremap = true, silent = true })
 
