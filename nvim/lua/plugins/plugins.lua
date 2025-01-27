@@ -312,7 +312,9 @@ return {
 
       local api = require("nvim-tree.api")
       vim.keymap.set('n', '<C-n>', api.tree.toggle, { desc = "nvim-tree: Open", noremap = true, silent = true, nowait = true })
-      vim.keymap.set('n', '<A-n>', function() api.tree.toggle({ find_file = true, update_root = true }) end, { desc = "nvim-tree: Open and find file", noremap = true, silent = true, nowait = true })
+      vim.keymap.set('n', '<A-n>', function()
+        api.tree.find_file({ open = true, update_root = true, focus = true })
+      end, { desc = "nvim-tree: Open and find file", noremap = true, silent = true, nowait = true })
     end,
   },
   {
