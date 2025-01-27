@@ -684,9 +684,9 @@ return {
       treesj.setup({
         use_default_keymaps = false,
       })
-      vim.keymap.set('n', '<leader><leader>m', treesj.toggle, { desc = 'Toggle (split/join) block of code' })
+      vim.keymap.set('n', '<leader><leader>t', treesj.toggle, { desc = 'Toggle (split/join) block of code' })
       vim.keymap.set('n', '<leader><leader>s', treesj.split, { desc = 'Split block of code' })
-      vim.keymap.set('n', '<leader><leader>j', treesj.join, { desc = 'Join block of code' })
+      vim.keymap.set('n', '<leader><leader>J', treesj.join, { desc = 'Join block of code' })
     end
   },
   {
